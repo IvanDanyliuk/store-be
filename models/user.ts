@@ -4,13 +4,17 @@ import Product from './product';
 
 
 const userSchema: Schema = new mongoose.Schema({
-  userId: String,
   firstName: String,
   lastName: String,
   email: String,
   phone: String,
-  imageUrl: String,
-  orderList: [Product],
+  city: String,
+  language: String,
+  avatarUrl: String,
+  orders: [{
+    product: Product,
+    date: Date,
+  }],
   createdAt: {
     type: Date,
     default: new Date(),

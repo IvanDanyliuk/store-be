@@ -3,12 +3,14 @@ import { ICategory } from "types";
 
 
 const categorySchema: Schema = new mongoose.Schema({
-  id: String,
-  title: String,
-  createdAt: {
-    type: Date,
-    default: new Date(),
-  }
+  main: {
+    title: String,
+    url: String,
+  },
+  subCategories: [{
+    title: String,
+    url: String,
+  }]
 });
 
 let Category = mongoose.model<ICategory>('Categories', categorySchema);
