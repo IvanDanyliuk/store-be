@@ -1,12 +1,19 @@
 import mongoose, { Schema } from "mongoose";
 import { IProduct } from "types";
-import Category from './category';
-import User from './user';
 
 
-const productSchema: Schema = new mongoose.Schema({
+const productSchema = new mongoose.Schema({
   title: String,
-  category: Category,
+  category: {
+    main: {
+      title: String,
+      url: String,
+    },
+    subCategory: {
+      title: String,
+      url: String,
+    },
+  },
   description: String,
   price: Number,
   color: String,
@@ -17,7 +24,11 @@ const productSchema: Schema = new mongoose.Schema({
   isInStock: Boolean,
   shortInfo: String,
   reviews: [{
-    user: User,
+    user: {
+      firstName: String,
+      lastName: String,
+      avatarUrl: String,
+    },
     comment: String,
     likes: Number,
     dislikes: Number,

@@ -1,16 +1,12 @@
 export interface IUser {
-  _id: string;
   firstName: string;
   lastName: string;
   email: string;
+  password: string;
   phone: string;
   city: string;
   language: string;
   avatarUrl: string;
-  orders: [{
-    product: IProduct,
-    date: string,
-  }];
   createdAt: {
     type: Date;
     default: Date;
@@ -18,7 +14,11 @@ export interface IUser {
 }
 
 export interface IReview {
-  user: IUser;
+  user: {
+    firstName: string;
+    lastName: string;
+    avatarUrl: string;
+  };
   comment: string;
   likes: number;
   dislikes: number;
@@ -26,9 +26,17 @@ export interface IReview {
 }
 
 export interface IProduct {
-  productId: string;
   title: string;
-  category: ICategory;
+  category: {
+    main: {
+      title: string;
+      url: string;
+    };
+    subCategory: {
+      title: string;
+      url: string;
+    };
+  };
   description: string;
   price: number;
   color: string;

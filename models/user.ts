@@ -7,14 +7,11 @@ const userSchema: Schema = new mongoose.Schema({
   firstName: String,
   lastName: String,
   email: String,
+  password: String,
   phone: String,
   city: String,
   language: String,
   avatarUrl: String,
-  orders: [{
-    product: Product,
-    date: Date,
-  }],
   createdAt: {
     type: Date,
     default: new Date(),
