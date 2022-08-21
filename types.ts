@@ -17,6 +17,7 @@ export interface IReview {
   user: {
     firstName: string;
     lastName: string;
+    email: string;
     avatarUrl: string;
   };
   comment: string;

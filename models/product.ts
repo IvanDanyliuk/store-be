@@ -27,6 +27,7 @@ const productSchema = new mongoose.Schema({
     user: {
       firstName: String,
       lastName: String,
+      email: String,
       avatarUrl: String,
     },
     comment: String,
