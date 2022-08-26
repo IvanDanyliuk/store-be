@@ -18,8 +18,6 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const { category } = req.query;
     try {
         const products = category ? yield product_1.default.find({ 'category.subCategory.url': category }) : yield product_1.default.find();
-        console.log(category);
-        console.log(products);
         res.status(200).json(products);
     }
     catch (error) {
@@ -31,7 +29,6 @@ const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const { id } = req.params;
     try {
         const product = yield product_1.default.findById(id);
-        console.log(product);
         res.status(200).json(product);
     }
     catch (error) {
