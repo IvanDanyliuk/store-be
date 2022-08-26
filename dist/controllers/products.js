@@ -15,8 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProduct = exports.getProducts = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { category } = req.query;
     try {
-        const products = yield product_1.default.find();
+        const products = category ? yield product_1.default.find({ 'category.subCategory.url': category }) : yield product_1.default.find();
+        console.log(category);
+        console.log(products);
         res.status(200).json(products);
     }
     catch (error) {
@@ -25,9 +28,10 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getProducts = getProducts;
 const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.query;
+    const { id } = req.params;
     try {
         const product = yield product_1.default.findById(id);
+        console.log(product);
         res.status(200).json(product);
     }
     catch (error) {

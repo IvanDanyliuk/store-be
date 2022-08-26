@@ -3,8 +3,9 @@ import Product from '../models/product';
 
 
 export const getProducts = async (req: any, res: any) => {
+  const { category } = req.query;
   try {
-    const products = await Product.find();
+    const products = category ? await Product.find({ 'category.subCategory.url': category }) : await Product.find();
     res.status(200).json(products);
   } catch (error: any) {
     res.status(404).json({ message: error.message });
@@ -12,7 +13,7 @@ export const getProducts = async (req: any, res: any) => {
 };
 
 export const getProduct = async (req: any, res: any) => {
-  const { id } = req.query;
+  const { id } = req.params;
   try {
     const product = await Product.findById(id);
     res.status(200).json(product);

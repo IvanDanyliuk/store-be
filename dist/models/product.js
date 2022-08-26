@@ -29,6 +29,7 @@ const productSchema = new mongoose_1.default.Schema({
             user: {
                 firstName: String,
                 lastName: String,
+                email: String,
                 avatarUrl: String,
             },
             comment: String,
