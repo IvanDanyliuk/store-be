@@ -4,6 +4,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 
 import productsRoute from './routes/products';
+import categoriesRoute from './routes/categories';
 import bodyParser from 'body-parser';
 
 
@@ -17,7 +18,7 @@ app.use(bodyParser.json({ limit: '30mb' }));
 app.use(bodyParser.urlencoded({ limit: '30mb' }));
 
 app.use('/products', productsRoute);
-// app.use('/categories', categoriesRoute);
+app.use('/categories', categoriesRoute);
 // app.use('/products', usersRoute);
 
 mongoose.connect(process.env.CONNECTION_URL!)

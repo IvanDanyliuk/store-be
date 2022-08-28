@@ -53,7 +53,6 @@ export interface IProduct {
 };
 
 export interface ICategory {
-  _id: string;
   main: {
     title: string;
     url: string;
@@ -62,10 +61,6 @@ export interface ICategory {
     title: string;
     url: string;
   }]
-  createdAt: {
-    type: Date;
-    default: Date;
-  };
 };
 
 export interface ISubCategory {

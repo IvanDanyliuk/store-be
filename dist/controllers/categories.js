@@ -25,7 +25,7 @@ const getCategories = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getCategories = getCategories;
 const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newCategoryItem = new category_1.default(req.body);
+    const newCategoryItem = new category_1.default(req.body.params.category);
     try {
         const newCategory = yield newCategoryItem.save();
         res.status(200).json(newCategory);

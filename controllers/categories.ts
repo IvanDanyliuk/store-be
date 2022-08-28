@@ -12,7 +12,7 @@ export const getCategories = async (req: any, res: any) => {
 };
 
 export const createCategory = async (req: any, res: any) => {
-  const newCategoryItem = new Category(req.body);
+  const newCategoryItem = new Category(req.body.params.category);
   try {
     const newCategory = await newCategoryItem.save();
     res.status(200).json(newCategory);
