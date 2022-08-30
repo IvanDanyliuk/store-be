@@ -38,8 +38,8 @@ exports.createCategory = createCategory;
 const updateCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id, updatedCategory } = req.body.params.updatedCategory;
-        yield category_1.default.findByIdAndUpdate(id, updatedCategory, { new: true });
-        res.status(200).json('Category has been updated successfully');
+        const updated = yield category_1.default.findByIdAndUpdate(id, updatedCategory, { new: true });
+        res.status(200).json(updated);
     }
     catch (error) {
         res.status(500).json({ message: error.message });

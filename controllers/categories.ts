@@ -24,8 +24,8 @@ export const createCategory = async (req: any, res: any) => {
 export const updateCategory = async (req: any, res: any) => {
   try {
     const { id, updatedCategory } = req.body.params.updatedCategory;
-    await Category.findByIdAndUpdate(id, updatedCategory, { new: true });
-    res.status(200).json('Category has been updated successfully');
+    const updated = await Category.findByIdAndUpdate(id, updatedCategory, { new: true });
+    res.status(200).json(updated);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
