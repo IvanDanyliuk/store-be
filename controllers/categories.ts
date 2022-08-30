@@ -23,8 +23,7 @@ export const createCategory = async (req: any, res: any) => {
 
 export const updateCategory = async (req: any, res: any) => {
   try {
-    const { id } = req.query;
-    const { updatedCategory } = req.body;
+    const { id, updatedCategory } = req.body.params.updatedCategory;
     await Category.findByIdAndUpdate(id, updatedCategory, { new: true });
     res.status(200).json('Category has been updated successfully');
   } catch (error: any) {
@@ -34,7 +33,7 @@ export const updateCategory = async (req: any, res: any) => {
 
 export const deleteCategory = async (req: any, res: any) => {
   try {
-    const { id } = req.body;
+    const { id } = req.query;
     await Category.findByIdAndDelete(id);
     res.status(200).json('Category has been deleted successfully');
   } catch (error: any) {

@@ -37,8 +37,7 @@ const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.createCategory = createCategory;
 const updateCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.query;
-        const { updatedCategory } = req.body;
+        const { id, updatedCategory } = req.body.params.updatedCategory;
         yield category_1.default.findByIdAndUpdate(id, updatedCategory, { new: true });
         res.status(200).json('Category has been updated successfully');
     }
@@ -49,7 +48,7 @@ const updateCategory = (req, res) => __awaiter(void 0, void 0, void 0, function*
 exports.updateCategory = updateCategory;
 const deleteCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.body;
+        const { id } = req.query;
         yield category_1.default.findByIdAndDelete(id);
         res.status(200).json('Category has been deleted successfully');
     }
