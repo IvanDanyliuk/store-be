@@ -23,7 +23,7 @@ export const getProduct = async (req: any, res: any) => {
 };
 
 export const createProduct = async (req: any, res: any) => {
-  const newProductItem = new Product(req.body);
+  const newProductItem = new Product(req.body.params.product);
   try {
     const newProduct = await newProductItem.save();
     res.status(200).json(newProduct);
@@ -45,7 +45,7 @@ export const updateProduct = async (req: any, res: any) => {
 
 export const deleteProduct = async (req: any, res: any) => {
   try {
-    const { id } = req.body;
+    const { id } = req.query;
     await Product.findByIdAndDelete(id);
     res.status(200).json('Product has been deleted successfully');
   } catch (error: any) {

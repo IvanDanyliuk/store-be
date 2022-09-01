@@ -37,7 +37,7 @@ const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getProduct = getProduct;
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newProductItem = new product_1.default(req.body);
+    const newProductItem = new product_1.default(req.body.params.product);
     try {
         const newProduct = yield newProductItem.save();
         res.status(200).json(newProduct);
@@ -61,7 +61,7 @@ const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.updateProduct = updateProduct;
 const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.body;
+        const { id } = req.query;
         yield product_1.default.findByIdAndDelete(id);
         res.status(200).json('Product has been deleted successfully');
     }
