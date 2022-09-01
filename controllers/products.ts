@@ -34,8 +34,7 @@ export const createProduct = async (req: any, res: any) => {
 
 export const updateProduct = async (req: any, res: any) => {
   try {
-    const { id } = req.query;
-    const { updatedProduct } = req.body;
+    const { id, updatedProduct } = req.body.params.updatedProduct;
     await Product.findByIdAndUpdate(id, updatedProduct, { new: true });
     res.status(200).json('Product has been updated successfully');
   } catch (error: any) {

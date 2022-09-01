@@ -49,8 +49,7 @@ const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* 
 exports.createProduct = createProduct;
 const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.query;
-        const { updatedProduct } = req.body;
+        const { id, updatedProduct } = req.body.params.updatedProduct;
         yield product_1.default.findByIdAndUpdate(id, updatedProduct, { new: true });
         res.status(200).json('Product has been updated successfully');
     }
