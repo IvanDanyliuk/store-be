@@ -1,6 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
 import { IUser } from 'types';
-import Product from './product';
 
 
 const userSchema: Schema = new mongoose.Schema({
@@ -10,7 +9,6 @@ const userSchema: Schema = new mongoose.Schema({
   password: String,
   phone: String,
   city: String,
-  language: String,
   avatarUrl: String,
   createdAt: {
     type: Date,

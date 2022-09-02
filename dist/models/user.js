@@ -11,7 +11,6 @@ const userSchema = new mongoose_1.default.Schema({
     password: String,
     phone: String,
     city: String,
-    language: String,
     avatarUrl: String,
     createdAt: {
         type: Date,
