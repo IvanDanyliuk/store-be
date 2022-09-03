@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 
 import productsRoute from './routes/products';
 import categoriesRoute from './routes/categories';
+import userRoute from './routes/users';
 import bodyParser from 'body-parser';
 
 
@@ -19,7 +20,7 @@ app.use(bodyParser.urlencoded({ limit: '30mb' }));
 
 app.use('/products', productsRoute);
 app.use('/categories', categoriesRoute);
-// app.use('/products', usersRoute);
+app.use('/user', userRoute);
 
 mongoose.connect(process.env.CONNECTION_URL!)
   .then(() => app.listen(port, () => console.log(`Server running on port: http://localhost:${port}`)))

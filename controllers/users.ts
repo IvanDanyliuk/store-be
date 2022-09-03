@@ -5,7 +5,7 @@ import User from '../models/user';
 
 
 export const signin = async (req: any, res: any) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body.params.userData;
   try {
     const existingUser = await User.findOne({ email });
     if(!existingUser) {
@@ -24,7 +24,7 @@ export const signin = async (req: any, res: any) => {
 };
 
 export const signup = async (req: any, res: any) => {
-  const { firstName, lastName, avatar, language, email, password, confirmPassword } = req.body;
+  const { firstName, lastName, avatar, email, password, confirmPassword } = req.body.params.userData;
   try {
     const existingUser = await User.findOne({ email });
     if(existingUser) {
@@ -35,7 +35,7 @@ export const signup = async (req: any, res: any) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const newUser = await User.create({ email, password: hashedPassword, firstName, lastName, avatar, language });
+    const newUser = await User.create({ email, password: hashedPassword, firstName, lastName, avatar });
     const token = jwt.sign({ email: newUser.email, id: newUser._id }, 'test', { expiresIn: '1h' });
     res.status(200).json({ result: newUser, token });
   } catch (error: any) {
@@ -45,8 +45,7 @@ export const signup = async (req: any, res: any) => {
 
 export const updateUser = async (req: any, res: any) => {
   try {
-    const { id } = req.query;
-    const { updatedUser } = req.body;
+    const { id, updatedUser } = req.body.params.userData;
     await User.findByIdAndUpdate(id, updatedUser, { new: true });
     res.status(200).json('User has been updated successfully');
   } catch (error: any) {
