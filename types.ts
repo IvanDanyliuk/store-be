@@ -7,6 +7,8 @@ export interface IUser {
   city: string;
   language: string;
   avatarUrl: string;
+  orders: [],
+  isAdmin: boolean;
   createdAt: {
     type: Date;
     default: Date;

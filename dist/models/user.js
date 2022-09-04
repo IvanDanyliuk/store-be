@@ -12,6 +12,8 @@ const userSchema = new mongoose_1.default.Schema({
     phone: String,
     city: String,
     avatarUrl: String,
+    orders: [],
+    isAdmin: Boolean,
     createdAt: {
         type: Date,
         default: new Date(),

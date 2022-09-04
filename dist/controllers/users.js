@@ -17,7 +17,7 @@ const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
 const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { email, password } = req.body;
+    const { email, password } = req.body.params.userData;
     try {
         const existingUser = yield user_1.default.findOne({ email });
         if (!existingUser) {
@@ -36,7 +36,7 @@ const signin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.signin = signin;
 const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { firstName, lastName, avatar, language, email, password, confirmPassword } = req.body;
+    const { firstName, lastName, avatarUrl, email, password, confirmPassword, phone, city, orders, isAdmin } = req.body.params.userData;
     try {
         const existingUser = yield user_1.default.findOne({ email });
         if (existingUser) {
@@ -46,7 +46,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.status(400).json({ message: 'Passwords don\'t match.' });
         }
         const hashedPassword = yield bcryptjs_1.default.hash(password, 12);
-        const newUser = yield user_1.default.create({ email, password: hashedPassword, firstName, lastName, avatar, language });
+        const newUser = yield user_1.default.create({ email, password: hashedPassword, firstName, lastName, avatarUrl, phone, city, orders, isAdmin });
         const token = jsonwebtoken_1.default.sign({ email: newUser.email, id: newUser._id }, 'test', { expiresIn: '1h' });
         res.status(200).json({ result: newUser, token });
     }
@@ -57,8 +57,7 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.signup = signup;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.query;
-        const { updatedUser } = req.body;
+        const { id, updatedUser } = req.body.params.userData;
         yield user_1.default.findByIdAndUpdate(id, updatedUser, { new: true });
         res.status(200).json('User has been updated successfully');
     }

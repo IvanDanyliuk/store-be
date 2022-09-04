@@ -10,6 +10,8 @@ const userSchema: Schema = new mongoose.Schema({
   phone: String,
   city: String,
   avatarUrl: String,
+  orders: [],
+  isAdmin: Boolean,
   createdAt: {
     type: Date,
     default: new Date(),
