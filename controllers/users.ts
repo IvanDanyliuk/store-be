@@ -45,9 +45,9 @@ export const signup = async (req: any, res: any) => {
 
 export const updateUser = async (req: any, res: any) => {
   try {
-    const { id, updatedUser } = req.body.params.userData;
-    await User.findByIdAndUpdate(id, updatedUser, { new: true });
-    res.status(200).json('User has been updated successfully');
+    const { id, userData } = req.body.params.userData;
+    const updatedUser = await User.findByIdAndUpdate(id, userData, { new: true });
+    res.status(200).json(updatedUser);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

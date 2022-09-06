@@ -57,9 +57,9 @@ const signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.signup = signup;
 const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, updatedUser } = req.body.params.userData;
-        yield user_1.default.findByIdAndUpdate(id, updatedUser, { new: true });
-        res.status(200).json('User has been updated successfully');
+        const { id, userData } = req.body.params.userData;
+        const updatedUser = yield user_1.default.findByIdAndUpdate(id, userData, { new: true });
+        res.status(200).json(updatedUser);
     }
     catch (error) {
         res.status(500).json({ message: error.message });
