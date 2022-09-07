@@ -68,7 +68,7 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.updateUser = updateUser;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.body.params;
+        const { id } = req.query;
         yield user_1.default.findByIdAndDelete(id);
         res.status(200).json('User has been deleted successfully');
     }

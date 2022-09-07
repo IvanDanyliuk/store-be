@@ -12,6 +12,6 @@ const router = Router();
 router.post('/signin', signin);
 router.post('/signup', signup);
 router.patch('/', updateUser);
-router.delete('/:id', deleteUser);
+router.delete('/', deleteUser);
 
 export default router;
