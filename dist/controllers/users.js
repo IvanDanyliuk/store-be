@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.signup = exports.signin = void 0;
+exports.deleteUser = exports.updatePassword = exports.updateUser = exports.signup = exports.signin = void 0;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = __importDefault(require("../models/user"));
@@ -66,6 +66,26 @@ const updateUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.updateUser = updateUser;
+const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id, currentPassword, newPassword } = req.body.params.passwordData;
+        const user = yield user_1.default.findById(id);
+        const isPasswordMatch = yield bcryptjs_1.default.compare(currentPassword, user.password);
+        if (isPasswordMatch) {
+            const hashedNewPassword = yield bcryptjs_1.default.hash(newPassword, 12);
+            //@ts-ignore
+            const updated = yield user_1.default.findByIdAndUpdate(id, Object.assign(Object.assign({}, user._doc), { password: hashedNewPassword }), { new: true });
+            res.status(200).json(updated);
+        }
+        else {
+            res.status(200).json('Passwords don\'t match.');
+        }
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+exports.updatePassword = updatePassword;
 const deleteUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.query;

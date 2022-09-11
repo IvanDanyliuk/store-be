@@ -53,6 +53,25 @@ export const updateUser = async (req: any, res: any) => {
   }
 };
 
+export const updatePassword = async (req: any, res: any) => {
+  try {
+    const { id, currentPassword, newPassword } = req.body.params.passwordData;
+    const user = await User.findById(id);
+    const isPasswordMatch = await bcrypt.compare(currentPassword, user!.password);
+
+    if(isPasswordMatch) {
+      const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+      //@ts-ignore
+      const updated = await User.findByIdAndUpdate(id, { ...user!._doc, password: hashedNewPassword }, { new: true });
+      res.status(200).json(updated);
+    } else {
+      res.status(200).json('Passwords don\'t match.');
+    }
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const deleteUser = async (req: any, res: any) => {
   try {
     const { id } = req.query;

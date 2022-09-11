@@ -6,5 +6,6 @@ const router = (0, express_1.Router)();
 router.post('/signin', users_1.signin);
 router.post('/signup', users_1.signup);
 router.patch('/', users_1.updateUser);
+router.patch('/update-password', users_1.updatePassword);
 router.delete('/', users_1.deleteUser);
 exports.default = router;
