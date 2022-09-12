@@ -78,7 +78,7 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
             res.status(200).json(updated);
         }
         else {
-            res.status(200).json('Passwords don\'t match.');
+            res.status(500).json('Passwords don\'t match.');
         }
     }
     catch (error) {

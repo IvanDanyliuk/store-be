@@ -65,7 +65,7 @@ export const updatePassword = async (req: any, res: any) => {
       const updated = await User.findByIdAndUpdate(id, { ...user!._doc, password: hashedNewPassword }, { new: true });
       res.status(200).json(updated);
     } else {
-      res.status(200).json('Passwords don\'t match.');
+      res.status(500).json('Passwords don\'t match.');
     }
   } catch (error: any) {
     res.status(500).json({ message: error.message });
