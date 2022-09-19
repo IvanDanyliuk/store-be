@@ -9,6 +9,7 @@ const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const products_1 = __importDefault(require("./routes/products"));
 const categories_1 = __importDefault(require("./routes/categories"));
+const shipping_1 = __importDefault(require("./routes/shipping"));
 const users_1 = __importDefault(require("./routes/users"));
 const body_parser_1 = __importDefault(require("body-parser"));
 dotenv_1.default.config();
@@ -19,6 +20,7 @@ app.use(body_parser_1.default.json({ limit: '30mb' }));
 app.use(body_parser_1.default.urlencoded({ limit: '30mb' }));
 app.use('/products', products_1.default);
 app.use('/categories', categories_1.default);
+app.use('/shipping', shipping_1.default);
 app.use('/user', users_1.default);
 mongoose_1.default.connect(process.env.CONNECTION_URL)
     .then(() => app.listen(port, () => console.log(`Server running on port: http://localhost:${port}`)))

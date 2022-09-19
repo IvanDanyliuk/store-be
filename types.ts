@@ -68,4 +68,11 @@ export interface ICategory {
 export interface ISubCategory {
   title: string;
   imageUrl: string;
-}
+};
+
+export interface IShipping {
+  company: string;
+  country: string;
+  cities: string[];
+  price: number;
+};

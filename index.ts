@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 
 import productsRoute from './routes/products';
 import categoriesRoute from './routes/categories';
+import shippingRoute from './routes/shipping';
 import userRoute from './routes/users';
 import bodyParser from 'body-parser';
 
@@ -20,6 +21,7 @@ app.use(bodyParser.urlencoded({ limit: '30mb' }));
 
 app.use('/products', productsRoute);
 app.use('/categories', categoriesRoute);
+app.use('/shipping', shippingRoute);
 app.use('/user', userRoute);
 
 mongoose.connect(process.env.CONNECTION_URL!)
