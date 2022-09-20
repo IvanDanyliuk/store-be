@@ -3,14 +3,10 @@ import { IShipping } from "types";
 
 
 const shippingSchema: Schema = new mongoose.Schema({
-  main: {
-    title: String,
-    url: String,
-  },
-  subCategories: [{
-    title: String,
-    url: String,
-  }]
+  company: String,
+  country: String,
+  cities: [String],
+  price: Number,
 });
 
 let Shipping = mongoose.model<IShipping>('Shipping', shippingSchema);

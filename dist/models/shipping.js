@@ -5,14 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const shippingSchema = new mongoose_1.default.Schema({
-    main: {
-        title: String,
-        url: String,
-    },
-    subCategories: [{
-            title: String,
-            url: String,
-        }]
+    company: String,
+    country: String,
+    cities: [String],
+    price: Number,
 });
 let Shipping = mongoose_1.default.model('Shipping', shippingSchema);
 exports.default = Shipping;

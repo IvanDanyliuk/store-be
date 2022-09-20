@@ -26,6 +26,7 @@ const getShipping = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getShipping = getShipping;
 const createShipping = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newShippingItem = new shipping_1.default(req.body.params.shipping);
+    console.log(req.body.params.shipping);
     try {
         const newShipping = yield newShippingItem.save();
         res.status(200).json(newShipping);
