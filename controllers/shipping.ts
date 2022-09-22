@@ -13,7 +13,6 @@ export const getShipping = async (req: any, res: any) => {
 
 export const createShipping = async (req: any, res: any) => {
   const newShippingItem = new Shipping(req.body.params.shipping);
-  console.log(req.body.params.shipping)
   try {
     const newShipping = await newShippingItem.save();
     res.status(200).json(newShipping);
