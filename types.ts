@@ -76,3 +76,15 @@ export interface IShipping {
   cities: string[];
   price: number;
 };
+
+export interface IOrder {
+  products: IProduct[];
+  user: IUser;
+  isPaid: boolean;
+  isShipped: boolean;
+  paymentMethod: string;
+  createdAt: {
+    type: Date;
+    default: Date;
+  };
+};
