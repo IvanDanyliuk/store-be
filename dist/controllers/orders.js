@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteOrder = exports.updateOrder = exports.createOrder = exports.getUserOrders = exports.getOrders = void 0;
+exports.deleteOrder = exports.payOrder = exports.updateOrder = exports.createOrder = exports.getUserOrders = exports.getOrders = void 0;
 const order_1 = __importDefault(require("../models/order"));
 const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -57,6 +57,17 @@ const updateOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.updateOrder = updateOrder;
+const payOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id, data } = req.body.params.paymentData;
+        const updated = yield order_1.default.findByIdAndUpdate(id, data.updatedOrder, { new: true });
+        res.status(200).json(updated);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+exports.payOrder = payOrder;
 const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.query;

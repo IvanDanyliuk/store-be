@@ -4,11 +4,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const product_1 = __importDefault(require("./product"));
-const user_1 = __importDefault(require("./user"));
 const orderSchema = new mongoose_1.default.Schema({
-    products: [product_1.default],
-    user: user_1.default,
+    products: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'Products',
+    },
+    user: {
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'User',
+    },
     isPaid: Boolean,
     isShipped: Boolean,
     paymentMethod: String,

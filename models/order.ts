@@ -1,12 +1,16 @@
 import mongoose, { Schema } from 'mongoose';
-import productSchema from './product';
-import userSchema from './user';
 import { IOrder } from '../types';
 
 
 const orderSchema: Schema = new mongoose.Schema({
-  products: [productSchema],
-  user: userSchema,
+  products: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Products',
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
   isPaid: Boolean,
   isShipped: Boolean,
   paymentMethod: String,
