@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Order from '../models/order';
+import Stripe from 'stripe';
 
 
 export const getOrders = async (req: any, res: any) => {
@@ -43,9 +44,22 @@ export const updateOrder = async (req: any, res: any) => {
 
 export const payOrder = async (req: any, res: any) => {
   try {
-    const { id, data } = req.body.params.paymentData;
-    const updated = await Order.findByIdAndUpdate(id, data.updatedOrder, { new: true });
-    res.status(200).json(updated);
+    const stripe = new Stripe(
+      process.env.SECRET_KEY!, 
+      { apiVersion: '2022-08-01', typescript: true }
+    );
+
+    const { items } = req.body.params.paymentData;
+
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: items,
+      currency: 'usd',
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
+
+    res.status(200).json({ clientSecret: paymentIntent.client_secret });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
