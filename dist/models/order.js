@@ -5,17 +5,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const orderSchema = new mongoose_1.default.Schema({
-    products: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'Products',
+    products: [{
+            id: String,
+            quantity: Number,
+            product: {
+                type: mongoose_1.default.Schema.Types.Mixed,
+                ref: 'Products',
+            },
+        }],
+    customer: {
+        firstName: String,
+        lastName: String,
+        phone: String,
+        email: String,
     },
-    user: {
-        type: mongoose_1.default.Schema.Types.ObjectId,
-        ref: 'User',
+    recepient: {
+        firstName: String,
+        lastName: String,
+        phone: String,
+        email: String,
     },
     isPaid: Boolean,
     isShipped: Boolean,
+    shippingCity: String,
+    shippingCompany: String,
     paymentMethod: String,
+    creditCardNumber: String,
     createdAt: {
         type: Date,
         default: new Date(),

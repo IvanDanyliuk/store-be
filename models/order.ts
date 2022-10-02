@@ -3,17 +3,32 @@ import { IOrder } from '../types';
 
 
 const orderSchema: Schema = new mongoose.Schema({
-  products: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Products',
+  products: [{
+    id: String,
+    quantity: Number,
+    product: {
+      type: mongoose.Schema.Types.Mixed,
+      ref: 'Products',
+    },
+  }],
+  customer: {
+    firstName: String,
+    lastName: String,
+    phone: String,
+    email: String,
   },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+  recepient: {
+    firstName: String,
+    lastName: String,
+    phone: String,
+    email: String,
   },
   isPaid: Boolean,
   isShipped: Boolean,
+  shippingCity: String,
+  shippingCompany: String,
   paymentMethod: String,
+  creditCardNumber: String,
   createdAt: {
     type: Date,
     default: new Date(),

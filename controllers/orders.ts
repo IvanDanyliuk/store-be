@@ -24,8 +24,8 @@ export const getUserOrders = async (req: any, res: any) => {
 
 export const createOrder = async (req: any, res: any) => {
   try {
-    const newOrderData = req.body.params.order;
-    const newOrder = new Order(newOrderData);
+    const newOrderItem = new Order(req.body.params.order);
+    const newOrder = newOrderItem.save();
     res.status(200).json(newOrder);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
@@ -44,22 +44,7 @@ export const updateOrder = async (req: any, res: any) => {
 
 export const payOrder = async (req: any, res: any) => {
   try {
-    const stripe = new Stripe(
-      process.env.SECRET_KEY!, 
-      { apiVersion: '2022-08-01', typescript: true }
-    );
-
-    const { items } = req.body.params.paymentData;
-
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: items,
-      currency: 'usd',
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    });
-
-    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

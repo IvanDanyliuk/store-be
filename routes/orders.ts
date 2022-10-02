@@ -15,7 +15,7 @@ router.get('/', getOrders);
 router.get('/', getUserOrders);
 router.post('/', createOrder);
 router.patch('/', updateOrder);
-router.patch('/payment', payOrder);
+router.post('/payment', payOrder);
 router.delete('/', deleteOrder);
 
 export default router;

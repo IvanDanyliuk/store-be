@@ -7,6 +7,6 @@ router.get('/', orders_1.getOrders);
 router.get('/', orders_1.getUserOrders);
 router.post('/', orders_1.createOrder);
 router.patch('/', orders_1.updateOrder);
-router.patch('/payment', orders_1.payOrder);
+router.post('/payment', orders_1.payOrder);
 router.delete('/', orders_1.deleteOrder);
 exports.default = router;
