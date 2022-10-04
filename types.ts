@@ -79,10 +79,25 @@ export interface IShipping {
 
 export interface IOrder {
   products: IProduct[];
-  user: IUser;
+  amount: number;
+  customer: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+  };
+  recepient: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email: string;
+  };
   isPaid: boolean;
   isShipped: boolean;
+  shippingCity: string;
+  shippingCompany: string;
   paymentMethod: string;
+  creditCardNumber: string;
   createdAt: {
     type: Date;
     default: Date;

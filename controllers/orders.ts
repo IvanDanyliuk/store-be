@@ -14,8 +14,8 @@ export const getOrders = async (req: any, res: any) => {
 
 export const getUserOrders = async (req: any, res: any) => {
   try {
-    const { email } = req.body.params;
-    const orders = await Order.find({ email });
+    const { email } = req.query;
+    const orders = await Order.find({ customer: { email } });
     res.status(200).json(orders);
   } catch (error: any) {
     res.status(500).json({ message: error.message });

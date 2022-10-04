@@ -13,6 +13,7 @@ const orderSchema = new mongoose_1.default.Schema({
                 ref: 'Products',
             },
         }],
+    amount: Number,
     customer: {
         firstName: String,
         lastName: String,

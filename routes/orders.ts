@@ -11,8 +11,8 @@ import {
 
 const router = Router();
 
-router.get('/', getOrders);
-router.get('/', getUserOrders);
+router.get('/admin', getOrders);
+router.get('/user', getUserOrders);
 router.post('/', createOrder);
 router.patch('/', updateOrder);
 router.post('/payment', payOrder);

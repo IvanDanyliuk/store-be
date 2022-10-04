@@ -26,8 +26,8 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getOrders = getOrders;
 const getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email } = req.body.params;
-        const orders = yield order_1.default.find({ email });
+        const { email } = req.query;
+        const orders = yield order_1.default.find({ customer: { email } });
         res.status(200).json(orders);
     }
     catch (error) {

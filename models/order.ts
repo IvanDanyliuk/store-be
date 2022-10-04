@@ -11,6 +11,7 @@ const orderSchema: Schema = new mongoose.Schema({
       ref: 'Products',
     },
   }],
+  amount: Number,
   customer: {
     firstName: String,
     lastName: String,
