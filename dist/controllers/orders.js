@@ -69,6 +69,7 @@ const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const { id } = req.query;
         yield order_1.default.findByIdAndDelete(id);
+        res.status(200).json('The order had been successfully deleted!');
     }
     catch (error) {
         res.status(500).json({ message: error.message });

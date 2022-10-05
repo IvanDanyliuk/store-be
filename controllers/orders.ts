@@ -54,6 +54,7 @@ export const deleteOrder = async (req: any, res: any) => {
   try {
     const { id } = req.query;
     await Order.findByIdAndDelete(id);
+    res.status(200).json('The order had been successfully deleted!')
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
