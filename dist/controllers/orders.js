@@ -48,8 +48,8 @@ const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.createOrder = createOrder;
 const updateOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, dataToUpdate } = req.body.params.updatedOrder;
-        const updated = yield order_1.default.findByIdAndUpdate(id, dataToUpdate, { new: true });
+        const { id, updatedOrder } = req.body.params.updatedOrder;
+        const updated = yield order_1.default.findByIdAndUpdate(id, updatedOrder, { new: true });
         res.status(200).json(updated);
     }
     catch (error) {

@@ -4,7 +4,7 @@ import { IOrder } from '../types';
 
 const orderSchema: Schema = new mongoose.Schema({
   products: [{
-    id: String,
+    _id: String,
     quantity: Number,
     product: {
       type: mongoose.Schema.Types.Mixed,

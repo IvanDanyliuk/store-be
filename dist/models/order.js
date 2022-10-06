@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const orderSchema = new mongoose_1.default.Schema({
     products: [{
-            id: String,
+            _id: String,
             quantity: Number,
             product: {
                 type: mongoose_1.default.Schema.Types.Mixed,

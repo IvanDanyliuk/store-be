@@ -34,8 +34,8 @@ export const createOrder = async (req: any, res: any) => {
 
 export const updateOrder = async (req: any, res: any) => {
   try {
-    const { id, dataToUpdate } = req.body.params.updatedOrder;
-    const updated = await Order.findByIdAndUpdate(id, dataToUpdate, { new: true });
+    const { id, updatedOrder } = req.body.params.updatedOrder;
+    const updated = await Order.findByIdAndUpdate(id, updatedOrder, { new: true });
     res.status(200).json(updated);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
