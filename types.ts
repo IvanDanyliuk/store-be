@@ -7,7 +7,8 @@ export interface IUser {
   city: string;
   language: string;
   avatarUrl: string;
-  orders: [],
+  wishList: IProduct[],
+  orders: IOrder[],
   isAdmin: boolean;
   createdAt: {
     type: Date;

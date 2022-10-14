@@ -10,6 +10,7 @@ const userSchema: Schema = new mongoose.Schema({
   phone: String,
   city: String,
   avatarUrl: String,
+  wishList: [],
   orders: [],
   isAdmin: Boolean,
   createdAt: {

@@ -12,6 +12,7 @@ const userSchema = new mongoose_1.default.Schema({
     phone: String,
     city: String,
     avatarUrl: String,
+    wishList: [],
     orders: [],
     isAdmin: Boolean,
     createdAt: {
