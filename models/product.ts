@@ -29,7 +29,11 @@ const productSchema = new mongoose.Schema({
       email: String,
       avatarUrl: String,
     },
-    comment: String,
+    comment: {
+      advantages: String,
+      disadvantages: String,
+      comment: String,
+    },
     likes: Number,
     dislikes: Number,
     date: Date,

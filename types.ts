@@ -23,7 +23,11 @@ export interface IReview {
     email: string;
     avatarUrl: string;
   };
-  comment: string;
+  comment: {
+    advantages: string;
+    disadvantages: string;
+    comment: string;
+  };
   likes: number;
   dislikes: number;
   date: Date;
