@@ -33,6 +33,7 @@ const productSchema = new mongoose.Schema({
       advantages: String,
       disadvantages: String,
       comment: String,
+      rate: Number,
     },
     likes: Number,
     dislikes: Number,

@@ -27,6 +27,7 @@ export interface IReview {
     advantages: string;
     disadvantages: string;
     comment: string;
+    rate: number;
   };
   likes: number;
   dislikes: number;

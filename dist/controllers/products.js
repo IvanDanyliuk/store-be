@@ -50,8 +50,8 @@ exports.createProduct = createProduct;
 const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id, updatedProduct } = req.body.params.updatedProduct;
-        yield product_1.default.findByIdAndUpdate(id, updatedProduct, { new: true });
-        res.status(200).json('Product has been updated successfully');
+        const updated = yield product_1.default.findByIdAndUpdate(id, updatedProduct, { new: true });
+        res.status(200).json(updated);
     }
     catch (error) {
         res.status(500).json({ message: error.message });
