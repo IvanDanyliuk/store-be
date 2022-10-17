@@ -4,6 +4,7 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 
 import productsRoute from './routes/products';
+import reviewsRouter from './routes/reviews';
 import categoriesRoute from './routes/categories';
 import shippingRoute from './routes/shipping';
 import userRoute from './routes/users';
@@ -21,6 +22,7 @@ app.use(bodyParser.json({ limit: '30mb' }));
 app.use(bodyParser.urlencoded({ limit: '30mb' }));
 
 app.use('/products', productsRoute);
+app.use('/reviews', reviewsRouter);
 app.use('/categories', categoriesRoute);
 app.use('/shipping', shippingRoute);
 app.use('/user', userRoute);

@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose from "mongoose";
 import { IProduct } from "types";
 
 
@@ -23,21 +23,8 @@ const productSchema = new mongoose.Schema({
   isInStock: Boolean,
   shortInfo: String,
   reviews: [{
-    user: {
-      firstName: String,
-      lastName: String,
-      email: String,
-      avatarUrl: String,
-    },
-    comment: {
-      advantages: String,
-      disadvantages: String,
-      comment: String,
-      rate: Number,
-    },
-    likes: Number,
-    dislikes: Number,
-    date: Date,
+    type: mongoose.Schema.Types.Mixed,
+    ref: 'Review',
   }],
   createdAt: {
     type: Date,

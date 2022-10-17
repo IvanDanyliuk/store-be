@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Product from '../models/product';
+import Review from '../models/review';
 
 
 export const getProducts = async (req: any, res: any) => {
@@ -16,7 +17,9 @@ export const getProduct = async (req: any, res: any) => {
   const { id } = req.params;
   try {
     const product = await Product.findById(id);
-    res.status(200).json(product);
+    const reviews = await Review.find({ productId: id });
+    //@ts-ignore
+    res.status(200).json({ ...product._doc, reviews});
   } catch (error: any) {
     res.status(404).json({ message: error.message });
   }

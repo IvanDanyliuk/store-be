@@ -25,21 +25,8 @@ const productSchema = new mongoose_1.default.Schema({
     isInStock: Boolean,
     shortInfo: String,
     reviews: [{
-            user: {
-                firstName: String,
-                lastName: String,
-                email: String,
-                avatarUrl: String,
-            },
-            comment: {
-                advantages: String,
-                disadvantages: String,
-                comment: String,
-                rate: Number,
-            },
-            likes: Number,
-            dislikes: Number,
-            date: Date,
+            type: mongoose_1.default.Schema.Types.Mixed,
+            ref: 'Review',
         }],
     createdAt: {
         type: Date,
