@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const reviewSchema = new mongoose_1.default.Schema({
     productId: String,
+    productImageUrl: String,
     userFirstName: String,
     userLastName: String,
     userEmail: String,

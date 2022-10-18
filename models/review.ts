@@ -4,6 +4,7 @@ import { IReview } from '../types';
 
 const reviewSchema = new mongoose.Schema({
   productId: String,
+  productImageUrl: String,
   userFirstName: String,
   userLastName: String,
   userEmail: String, 

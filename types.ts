@@ -18,6 +18,7 @@ export interface IUser {
 
 export interface IReview {
   productId: string;
+  productImageUrl: string;
   userFirstName: string;
   userLastName: string;
   userEmail: string;
