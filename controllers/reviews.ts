@@ -12,6 +12,16 @@ export const getUserReviews = async (req: any, res: any) => {
   }
 };
 
+export const getProductReviews = async (req: any, res: any) => {
+  const { productId } = req.query;
+  try {
+    const reviews = await Review.find({ productId });
+    res.status(200).json(reviews);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 export const createReview = async (req: any, res: any) => {
   const newReviewInstance = new Review(req.body.params.review);
   try {
@@ -24,6 +34,7 @@ export const createReview = async (req: any, res: any) => {
 
 export const updateReview = async (req: any, res: any) => {
   const { id, updatedReview } = req.body.params.updatedReview;
+  console.log(req.body.params.updatedReview)
   try {
     const updated = await Review.findByIdAndUpdate(id, updatedReview, { new: true });
     res.status(200).json(updated);

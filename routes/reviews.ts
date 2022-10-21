@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { 
   getUserReviews, 
+  getProductReviews, 
   createReview, 
   updateReview, 
   deleteReview 
@@ -9,7 +10,8 @@ import {
 
 const router = Router();
 
-router.get('/', getUserReviews);
+router.get('/user', getUserReviews);
+router.get('/product', getProductReviews);
 router.post('/', createReview);
 router.patch('/', updateReview);
 router.delete('/', deleteReview);

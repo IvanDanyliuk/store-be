@@ -15,8 +15,8 @@ const reviewSchema = new mongoose_1.default.Schema({
     disadvantages: String,
     comment: String,
     rate: Number,
-    likes: Number,
-    dislikes: Number,
+    likes: [String],
+    dislikes: [String],
     date: Date,
 });
 let Review = mongoose_1.default.model('Review', reviewSchema);

@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProduct = exports.getProducts = void 0;
 const product_1 = __importDefault(require("../models/product"));
-const review_1 = __importDefault(require("../models/review"));
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { category } = req.query;
     try {
@@ -30,9 +29,7 @@ const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const { id } = req.params;
     try {
         const product = yield product_1.default.findById(id);
-        const reviews = yield review_1.default.find({ productId: id });
-        //@ts-ignore
-        res.status(200).json(Object.assign(Object.assign({}, product._doc), { reviews }));
+        res.status(200).json(product);
     }
     catch (error) {
         res.status(404).json({ message: error.message });

@@ -13,8 +13,8 @@ const reviewSchema = new mongoose.Schema({
   disadvantages: String,
   comment: String,
   rate: Number,
-  likes: Number,
-  dislikes: Number,
+  likes: [String],
+  dislikes: [String],
   date: Date,
 });
 

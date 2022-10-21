@@ -22,10 +22,6 @@ const productSchema = new mongoose.Schema({
   promotion: [String],
   isInStock: Boolean,
   shortInfo: String,
-  reviews: [{
-    type: mongoose.Schema.Types.Mixed,
-    ref: 'Review',
-  }],
   createdAt: {
     type: Date,
     default: new Date(),
