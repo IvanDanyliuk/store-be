@@ -12,6 +12,17 @@ export const getProducts = async (req: any, res: any) => {
   }
 };
 
+export const getTopProducts = async (req: any, res: any) => {
+  try {
+    const products = await Product.find();
+    const sortedProducts = products.sort((acc, cur) => cur.rating - acc.rating);
+    const topRated = sortedProducts.length > 10 ? sortedProducts.slice(0, 10) : sortedProducts;
+    res.status(200).json(topRated);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 export const getProduct = async (req: any, res: any) => {
   const { id } = req.params;
   try {
