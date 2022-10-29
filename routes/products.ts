@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { 
-  getProducts, 
+  getAllProducts, 
+  getProductsByCategory, 
   getTopProducts, 
   getProduct, 
   createProduct, 
@@ -11,7 +12,8 @@ import {
 
 const router = Router();
 
-router.get('/', getProducts);
+router.get('/all', getAllProducts);
+router.get('/', getProductsByCategory);
 router.get('/top-rated', getTopProducts);
 router.get('/:id', getProduct);
 router.post('/', createProduct);

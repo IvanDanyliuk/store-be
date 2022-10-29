@@ -34,6 +34,7 @@ export interface IReview {
 
 export interface IProduct {
   title: string;
+  brand: string;
   category: {
     main: {
       title: string;

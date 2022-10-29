@@ -4,6 +4,7 @@ import { IProduct } from "types";
 
 const productSchema = new mongoose.Schema({
   title: String,
+  brand: String,
   category: {
     main: {
       title: String,
