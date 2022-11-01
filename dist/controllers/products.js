@@ -12,14 +12,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getProduct = exports.getTopProducts = exports.getProducts = void 0;
+exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getBrands = exports.getProduct = exports.getTopProducts = exports.getProducts = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, productsPerPage, category } = req.query;
     try {
         const response = category ? yield product_1.default.find({ 'category.subCategory.url': category }) : yield product_1.default.find();
         const products = response.slice(productsPerPage * (page - 1), productsPerPage * page);
-        res.status(200).json({ data: products, pages: Math.ceil(response.length / productsPerPage) });
+        res.status(200).json({
+            data: products,
+            pages: Math.ceil(response.length / productsPerPage)
+        });
     }
     catch (error) {
         res.status(404).json({ message: error.message });
@@ -49,6 +52,18 @@ const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getProduct = getProduct;
+const getBrands = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { category } = req.query;
+    try {
+        const products = yield product_1.default.find({ 'category.subCategory.url': category });
+        const brands = [...new Set(products.map(product => product.brand))];
+        res.status(200).json(brands);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+exports.getBrands = getBrands;
 const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newProductItem = new product_1.default(req.body.params.product);
     try {
