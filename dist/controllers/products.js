@@ -15,13 +15,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getBrands = exports.getProduct = exports.getTopProducts = exports.getProducts = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { page, productsPerPage, category } = req.query;
+    const { page, productsPerPage, category, filterData } = req.query;
     try {
-        const response = category ? yield product_1.default.find({ 'category.subCategory.url': category }) : yield product_1.default.find();
-        const products = response.slice(productsPerPage * (page - 1), productsPerPage * page);
+        const response = category ?
+            yield product_1.default.find({ 'category.subCategory.url': category }) :
+            yield product_1.default.find();
+        const parsedFilterData = filterData && JSON.parse(filterData);
+        const products = filterData ?
+            response
+                .filter(product => parsedFilterData.brands.includes(product.brand))
+                .filter(product => parsedFilterData.maxPrice > 0 ?
+                product.price >= parsedFilterData.minPrice && product.price <= parsedFilterData.maxPrice :
+                product.price >= parsedFilterData.minPrice) : response;
+        const pages = filterData ?
+            Math.ceil(products.length / productsPerPage) :
+            Math.ceil(response.length / productsPerPage);
         res.status(200).json({
-            data: products,
-            pages: Math.ceil(response.length / productsPerPage)
+            data: products.slice(productsPerPage * (page - 1), productsPerPage * page),
+            pages
         });
     }
     catch (error) {

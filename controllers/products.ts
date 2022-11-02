@@ -3,13 +3,29 @@ import Product from '../models/product';
 
 
 export const getProducts = async (req: any, res: any) => {
-  const { page, productsPerPage, category } = req.query;
+  const { page, productsPerPage, category, filterData } = req.query;
   try {
-    const response = category ? await Product.find({ 'category.subCategory.url': category }) : await Product.find();
-    const products = response.slice(productsPerPage * (page - 1), productsPerPage * page);
+    const response = category ? 
+      await Product.find({ 'category.subCategory.url': category }) : 
+      await Product.find();
+      
+    const parsedFilterData = filterData && JSON.parse(filterData);
+
+    const products = filterData ? 
+      response
+        .filter(product => parsedFilterData!.brands.includes(product.brand))
+        .filter(product => parsedFilterData.maxPrice > 0 ? 
+          product.price >= parsedFilterData.minPrice && product.price <= parsedFilterData.maxPrice : 
+          product.price >= parsedFilterData.minPrice
+        ) : response;
+
+    const pages = filterData ? 
+      Math.ceil(products.length / productsPerPage) : 
+      Math.ceil(response.length / productsPerPage);
+
     res.status(200).json({ 
-      data: products, 
-      pages: Math.ceil(response.length / productsPerPage) 
+      data: products.slice(productsPerPage * (page - 1), productsPerPage * page), 
+      pages
     });
   } catch (error: any) {
     res.status(404).json({ message: error.message });
