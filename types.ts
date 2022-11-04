@@ -5,7 +5,6 @@ export interface IUser {
   password: string;
   phone: string;
   city: string;
-  language: string;
   avatarUrl: string;
   wishList: IProduct[],
   orders: IOrder[],

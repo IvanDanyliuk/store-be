@@ -62,7 +62,7 @@ export const getBrands = async (req: any, res: any) => {
   } catch (error: any) {
     res.status(500).json({ message: error.message })
   }
-}
+};
 
 export const createProduct = async (req: any, res: any) => {
   const newProductItem = new Product(req.body.params.product);
