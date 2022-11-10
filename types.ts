@@ -107,3 +107,16 @@ export interface IOrder {
     default: Date;
   };
 };
+
+export interface IVacancy {
+  title: string,
+  employment: string[];
+  character: string[];
+  responsibilities: string;
+  mustHaves: string;
+  experience: string;
+  salary?: string;
+  contactPerson: string;
+  contactPhone: string;
+  contactEmail: string;
+};
