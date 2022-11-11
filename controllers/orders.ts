@@ -4,9 +4,17 @@ import Stripe from 'stripe';
 
 
 export const getOrders = async (req: any, res: any) => {
+  const { page, ordersPerPage, filterData } = req.query;
   try {
-    const orders = await Order.find();
-    res.status(200).json(orders);
+    const response = !filterData ? 
+      await Order.find() : 
+      await Order.find({ 'customer.lastName': filterData });
+    const pages = Math.ceil(response.length / ordersPerPage);
+    const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
+    res.status(200).json({
+      data: orders,
+      pages
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
@@ -14,9 +22,14 @@ export const getOrders = async (req: any, res: any) => {
 
 export const getUserOrders = async (req: any, res: any) => {
   try {
-    const { email } = req.query;
-    const orders = await Order.find({ customer: { email } });
-    res.status(200).json(orders);
+    const { page, ordersPerPage, email } = req.query;
+    const response = await Order.find({ 'customer.email': email });
+    const pages = Math.ceil(response.length / ordersPerPage);
+    const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
+    res.status(200).json({
+      data: orders,
+      pages
+    });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

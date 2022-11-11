@@ -15,9 +15,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOrder = exports.payOrder = exports.updateOrder = exports.createOrder = exports.getUserOrders = exports.getOrders = void 0;
 const order_1 = __importDefault(require("../models/order"));
 const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { page, ordersPerPage, filterData } = req.query;
     try {
-        const orders = yield order_1.default.find();
-        res.status(200).json(orders);
+        const response = !filterData ?
+            yield order_1.default.find() :
+            yield order_1.default.find({ 'customer.lastName': filterData });
+        const pages = Math.ceil(response.length / ordersPerPage);
+        const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
+        res.status(200).json({
+            data: orders,
+            pages
+        });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
@@ -26,9 +34,14 @@ const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getOrders = getOrders;
 const getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { email } = req.query;
-        const orders = yield order_1.default.find({ customer: { email } });
-        res.status(200).json(orders);
+        const { page, ordersPerPage, email } = req.query;
+        const response = yield order_1.default.find({ 'customer.email': email });
+        const pages = Math.ceil(response.length / ordersPerPage);
+        const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
+        res.status(200).json({
+            data: orders,
+            pages
+        });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
