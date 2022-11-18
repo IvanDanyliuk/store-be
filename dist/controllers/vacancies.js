@@ -31,7 +31,7 @@ const getVacancies = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getVacancies = getVacancies;
 const getVacancy = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.query;
+    const { id } = req.params;
     try {
         const vacancy = yield vacancy_1.default.findById(id);
         res.status(200).json(vacancy);

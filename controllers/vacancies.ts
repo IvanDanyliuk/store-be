@@ -18,7 +18,7 @@ export const getVacancies = async (req: any, res: any) => {
 };
 
 export const getVacancy = async (req: any, res: any) => {
-  const { id } = req.query;
+  const { id } = req.params;
   try {
     const vacancy = await Vacancy.findById(id);
     res.status(200).json(vacancy);

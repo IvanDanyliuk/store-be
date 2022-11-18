@@ -53,6 +53,17 @@ export const getProduct = async (req: any, res: any) => {
   }
 };
 
+export const findProducts = async (req: any, res: any) => {
+  const { title } = req.query;
+  try {
+    const requestValue = new RegExp(title);
+    const products = await Product.find({ title: { $regex: requestValue, $options: 'i' } });
+    res.status(200).json(products);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const getBrands = async (req: any, res: any) => {
   const { category } = req.query;
   try {
@@ -60,7 +71,7 @@ export const getBrands = async (req: any, res: any) => {
     const brands = [...new Set(products.map(product => product.brand))];
     res.status(200).json(brands);
   } catch (error: any) {
-    res.status(500).json({ message: error.message })
+    res.status(500).json({ message: error.message });
   }
 };
 

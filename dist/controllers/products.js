@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getBrands = exports.getProduct = exports.getTopProducts = exports.getProducts = void 0;
+exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getBrands = exports.findProducts = exports.getProduct = exports.getTopProducts = exports.getProducts = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, productsPerPage, category, filterData } = req.query;
@@ -63,6 +63,18 @@ const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getProduct = getProduct;
+const findProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { title } = req.query;
+    try {
+        const requestValue = new RegExp(title);
+        const products = yield product_1.default.find({ title: { $regex: requestValue, $options: 'i' } });
+        res.status(200).json(products);
+    }
+    catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+exports.findProducts = findProducts;
 const getBrands = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { category } = req.query;
     try {
