@@ -33,11 +33,12 @@ export const getProducts = async (req: any, res: any) => {
 };
 
 export const getTopProducts = async (req: any, res: any) => {
+  const { productsNumber } = req.query;
   try {
     const products = await Product.find();
     const sortedProducts = products.sort((acc, cur) => cur.rating - acc.rating);
-    const topRated = sortedProducts.length > 10 ? sortedProducts.slice(0, 10) : sortedProducts;
-    res.status(200).json({ data: topRated, pages: topRated.length / 10 });
+    const topRated = sortedProducts.length > productsNumber ? sortedProducts.slice(0, productsNumber) : sortedProducts;
+    res.status(200).json({ data: topRated, pages: topRated.length / productsNumber });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

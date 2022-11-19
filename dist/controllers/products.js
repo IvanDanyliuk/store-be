@@ -41,11 +41,12 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getProducts = getProducts;
 const getTopProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { productsNumber } = req.query;
     try {
         const products = yield product_1.default.find();
         const sortedProducts = products.sort((acc, cur) => cur.rating - acc.rating);
-        const topRated = sortedProducts.length > 10 ? sortedProducts.slice(0, 10) : sortedProducts;
-        res.status(200).json({ data: topRated, pages: topRated.length / 10 });
+        const topRated = sortedProducts.length > productsNumber ? sortedProducts.slice(0, productsNumber) : sortedProducts;
+        res.status(200).json({ data: topRated, pages: topRated.length / productsNumber });
     }
     catch (error) {
         res.status(500).json({ message: error.message });
