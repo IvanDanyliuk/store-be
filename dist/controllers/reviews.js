@@ -49,7 +49,6 @@ const createReview = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.createReview = createReview;
 const updateReview = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, updatedReview } = req.body.params.updatedReview;
-    console.log(req.body.params.updatedReview);
     try {
         const updated = yield review_1.default.findByIdAndUpdate(id, updatedReview, { new: true });
         res.status(200).json(updated);

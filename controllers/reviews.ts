@@ -34,7 +34,6 @@ export const createReview = async (req: any, res: any) => {
 
 export const updateReview = async (req: any, res: any) => {
   const { id, updatedReview } = req.body.params.updatedReview;
-  console.log(req.body.params.updatedReview)
   try {
     const updated = await Review.findByIdAndUpdate(id, updatedReview, { new: true });
     res.status(200).json(updated);
