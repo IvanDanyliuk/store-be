@@ -119,4 +119,8 @@ export interface IVacancy {
   contactPerson: string;
   contactPhone: string;
   contactEmail: string;
+  createdAt: {
+    type: Date;
+    default: Date;
+  };
 };
