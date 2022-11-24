@@ -10,6 +10,7 @@ import shippingRoute from './routes/shipping';
 import userRoute from './routes/users';
 import ordersRoute from './routes/orders';
 import vacanciesRoute from './routes/vacancies';
+import galleryRouter from './routes/gallery';
 import bodyParser from 'body-parser';
 
 
@@ -29,6 +30,7 @@ app.use('/shipping', shippingRoute);
 app.use('/user', userRoute);
 app.use('/orders', ordersRoute);
 app.use('/vacancies', vacanciesRoute);
+app.use('/gallery', galleryRouter);
 
 mongoose.connect(process.env.CONNECTION_URL!)
   .then(() => app.listen(port, () => console.log(`Server running on port: http://localhost:${port}`)))

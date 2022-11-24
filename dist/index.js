@@ -14,6 +14,7 @@ const shipping_1 = __importDefault(require("./routes/shipping"));
 const users_1 = __importDefault(require("./routes/users"));
 const orders_1 = __importDefault(require("./routes/orders"));
 const vacancies_1 = __importDefault(require("./routes/vacancies"));
+const gallery_1 = __importDefault(require("./routes/gallery"));
 const body_parser_1 = __importDefault(require("body-parser"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
@@ -28,6 +29,7 @@ app.use('/shipping', shipping_1.default);
 app.use('/user', users_1.default);
 app.use('/orders', orders_1.default);
 app.use('/vacancies', vacancies_1.default);
+app.use('/gallery', gallery_1.default);
 mongoose_1.default.connect(process.env.CONNECTION_URL)
     .then(() => app.listen(port, () => console.log(`Server running on port: http://localhost:${port}`)))
     .catch((error) => console.log(`${error} did not connect`));

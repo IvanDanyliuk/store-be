@@ -124,3 +124,7 @@ export interface IVacancy {
     default: Date;
   };
 };
+
+export interface IGallery {
+  url: string;
+};

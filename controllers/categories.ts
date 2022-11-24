@@ -1,8 +1,9 @@
 import mongoose from 'mongoose';
+import { Request, Response } from 'express';
 import Category from '../models/category';
 
 
-export const getCategories = async (req: any, res: any) => {
+export const getCategories = async (req: Request, res: Response) => {
   try {
     const categories = await Category.find();
     res.status(200).json(categories);
@@ -11,7 +12,7 @@ export const getCategories = async (req: any, res: any) => {
   }
 };
 
-export const createCategory = async (req: any, res: any) => {
+export const createCategory = async (req: Request, res: Response) => {
   const newCategoryItem = new Category(req.body.params.category);
   try {
     const newCategory = await newCategoryItem.save();
@@ -21,7 +22,7 @@ export const createCategory = async (req: any, res: any) => {
   }
 };
 
-export const updateCategory = async (req: any, res: any) => {
+export const updateCategory = async (req: Request, res: Response) => {
   try {
     const { id, updatedCategory } = req.body.params.updatedCategory;
     const updated = await Category.findByIdAndUpdate(id, updatedCategory, { new: true });
@@ -31,7 +32,7 @@ export const updateCategory = async (req: any, res: any) => {
   }
 };
 
-export const deleteCategory = async (req: any, res: any) => {
+export const deleteCategory = async (req: Request, res: Response) => {
   try {
     const { id } = req.query;
     await Category.findByIdAndDelete(id);
