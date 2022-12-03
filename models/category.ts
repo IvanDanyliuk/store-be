@@ -10,6 +10,7 @@ const categorySchema: Schema = new mongoose.Schema({
   subCategories: [{
     title: String,
     url: String,
+    image: String,
   }]
 });
 

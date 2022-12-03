@@ -12,6 +12,7 @@ const categorySchema = new mongoose_1.default.Schema({
     subCategories: [{
             title: String,
             url: String,
+            image: String,
         }]
 });
 let Category = mongoose_1.default.model('Categories', categorySchema);

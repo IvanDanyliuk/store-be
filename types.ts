@@ -66,6 +66,7 @@ export interface ICategory {
   subCategories: [{
     title: string;
     url: string;
+    image: string;
   }]
 };
 
