@@ -16,6 +16,7 @@ exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.
 const product_1 = __importDefault(require("../models/product"));
 const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, productsPerPage, category, filterData } = req.query;
+    console.log(req.query);
     try {
         const response = category ?
             yield product_1.default.find({ 'category.subCategory.url': category }) :
@@ -23,7 +24,7 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const parsedFilterData = filterData && JSON.parse(filterData);
         const products = filterData ?
             response
-                .filter(product => parsedFilterData.brands.includes(product.brand))
+                .filter(product => parsedFilterData.brands.length > 0 ? parsedFilterData.brands.includes(product.brand) : product)
                 .filter(product => parsedFilterData.maxPrice > 0 ?
                 product.price >= parsedFilterData.minPrice && product.price <= parsedFilterData.maxPrice :
                 product.price >= parsedFilterData.minPrice) : response;
