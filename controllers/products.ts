@@ -13,7 +13,10 @@ export const getProducts = async (req: any, res: any) => {
 
     const products = filterData ? 
       response
-        .filter(product => parsedFilterData!.brands.length > 0 ? parsedFilterData!.brands.includes(product.brand) : product)
+        .filter(product => parsedFilterData!.brands.length > 0 ? 
+          parsedFilterData!.brands.includes(product.brand) : 
+          product
+        )
         .filter(product => parsedFilterData.maxPrice > 0 ? 
           product.price >= parsedFilterData.minPrice && product.price <= parsedFilterData.maxPrice : 
           product.price >= parsedFilterData.minPrice
