@@ -14,64 +14,59 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteVacancy = exports.updateVacancy = exports.createVacancy = exports.getVacancy = exports.getVacancies = void 0;
 const vacancy_1 = __importDefault(require("../models/vacancy"));
-const getVacancies = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { page, itemsPerPage } = req.query;
+const getVacancies = (page, itemsPerPage) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield vacancy_1.default.find();
         const pages = Math.ceil(response.length / itemsPerPage);
         const vacancies = response.slice(itemsPerPage * (page - 1), itemsPerPage * page);
-        res.status(200).json({
+        return ({
             data: vacancies,
             pages
         });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot find vacancies');
     }
 });
 exports.getVacancies = getVacancies;
-const getVacancy = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
+const getVacancy = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const vacancy = yield vacancy_1.default.findById(id);
-        res.status(200).json(vacancy);
+        return vacancy;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot find a vacancy by passed id');
     }
 });
 exports.getVacancy = getVacancy;
-const createVacancy = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { vacancy } = req.body.params;
+const createVacancy = (vacancy) => __awaiter(void 0, void 0, void 0, function* () {
     const newVacancyItem = new vacancy_1.default(vacancy);
     try {
         const newVacancy = yield newVacancyItem.save();
-        res.status(200).json(newVacancy);
+        return newVacancy;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot create a new vacancy');
     }
 });
 exports.createVacancy = createVacancy;
-const updateVacancy = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id, updatedVacancy } = req.body.params.updatedVacancy;
+const updateVacancy = (id, updatedVacancy) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const updated = yield vacancy_1.default.findByIdAndUpdate(id, updatedVacancy, { new: true });
-        res.status(200).json(updated);
+        return updated;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot update a vacancy');
     }
 });
 exports.updateVacancy = updateVacancy;
-const deleteVacancy = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.query;
+const deleteVacancy = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield vacancy_1.default.findByIdAndDelete(id);
-        res.status(200).json('Vacancy has been deleted successfully');
+        return 'Vacancy has been deleted successfully';
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot delete a vacancy');
     }
 });
 exports.deleteVacancy = deleteVacancy;

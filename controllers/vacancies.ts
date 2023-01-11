@@ -1,59 +1,55 @@
 import mongoose from 'mongoose';
+import { IVacancy } from 'types';
 import Vacancy from '../models/vacancy';
 
 
-export const getVacancies = async (req: any, res: any) => {
-  const { page, itemsPerPage } = req.query;
+export const getVacancies = async (page: any, itemsPerPage: any) => {
   try {
     const response = await Vacancy.find();
     const pages = Math.ceil(response.length / itemsPerPage);
     const vacancies = response.slice(itemsPerPage * (page - 1), itemsPerPage * page);
-    res.status(200).json({
+    return ({
       data: vacancies,
       pages
     });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot find vacancies');
   }
 };
 
-export const getVacancy = async (req: any, res: any) => {
-  const { id } = req.params;
+export const getVacancy = async (id: any) => {
   try {
     const vacancy = await Vacancy.findById(id);
-    res.status(200).json(vacancy);
+    return vacancy;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot find a vacancy by passed id');
   }
 };
 
-export const createVacancy = async (req: any, res: any) => {
-  const { vacancy } = req.body.params;
+export const createVacancy = async (vacancy: IVacancy) => {
   const newVacancyItem = new Vacancy(vacancy);
   try {
     const newVacancy = await newVacancyItem.save();
-    res.status(200).json(newVacancy);
+    return newVacancy;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot create a new vacancy');
   }
 };
 
-export const updateVacancy = async (req: any, res: any) =>{
-  const { id, updatedVacancy } = req.body.params.updatedVacancy;
+export const updateVacancy = async (id: any, updatedVacancy: any) =>{
   try {
     const updated = await Vacancy.findByIdAndUpdate(id, updatedVacancy, { new: true });
-    res.status(200).json(updated);
+    return updated;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot update a vacancy');
   }
 };
 
-export const deleteVacancy = async (req: any, res: any) => {
-  const { id } = req.query;
+export const deleteVacancy = async (id: any) => {
   try {
     await Vacancy.findByIdAndDelete(id);
-    res.status(200).json('Vacancy has been deleted successfully');
+    return 'Vacancy has been deleted successfully';
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot delete a vacancy');
   }
 };
