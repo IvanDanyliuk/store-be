@@ -14,46 +14,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCategory = exports.updateCategory = exports.createCategory = exports.getCategories = void 0;
 const category_1 = __importDefault(require("../models/category"));
-const getCategories = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getCategories = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const categories = yield category_1.default.find();
-        res.status(200).json(categories);
+        return categories;
     }
     catch (error) {
-        res.status(404).json({ message: error.message });
+        throw Error('Cannot find categories');
     }
 });
 exports.getCategories = getCategories;
-const createCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newCategoryItem = new category_1.default(req.body.params.category);
+const createCategory = (category) => __awaiter(void 0, void 0, void 0, function* () {
+    const newCategoryItem = new category_1.default();
     try {
         const newCategory = yield newCategoryItem.save();
-        res.status(200).json(newCategory);
+        return newCategory;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot create a new category');
     }
 });
 exports.createCategory = createCategory;
-const updateCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateCategory = (id, updatedCategory) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, updatedCategory } = req.body.params.updatedCategory;
         const updated = yield category_1.default.findByIdAndUpdate(id, updatedCategory, { new: true });
-        res.status(200).json(updated);
+        return updated;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot update a category');
     }
 });
 exports.updateCategory = updateCategory;
-const deleteCategory = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteCategory = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.query;
         yield category_1.default.findByIdAndDelete(id);
-        res.status(200).json('Category has been deleted successfully');
+        return 'Category has been deleted successfully';
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot delete category');
     }
 });
 exports.deleteCategory = deleteCategory;

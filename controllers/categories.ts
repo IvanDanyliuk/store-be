@@ -1,43 +1,41 @@
 import mongoose from 'mongoose';
-import { Request, Response } from 'express';
 import Category from '../models/category';
+import { ICategory } from './../types';
 
 
-export const getCategories = async (req: Request, res: Response) => {
+export const getCategories = async () => {
   try {
     const categories = await Category.find();
-    res.status(200).json(categories);
+    return categories;
   } catch (error: any) {
-    res.status(404).json({ message: error.message });
+    throw Error('Cannot find categories');
   }
 };
 
-export const createCategory = async (req: Request, res: Response) => {
-  const newCategoryItem = new Category(req.body.params.category);
+export const createCategory = async (category: ICategory) => {
+  const newCategoryItem = new Category();
   try {
     const newCategory = await newCategoryItem.save();
-    res.status(200).json(newCategory);
+    return newCategory;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot create a new category');
   }
 };
 
-export const updateCategory = async (req: Request, res: Response) => {
+export const updateCategory = async (id: string, updatedCategory: ICategory) => {
   try {
-    const { id, updatedCategory } = req.body.params.updatedCategory;
     const updated = await Category.findByIdAndUpdate(id, updatedCategory, { new: true });
-    res.status(200).json(updated);
+    return updated;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot update a category');
   }
 };
 
-export const deleteCategory = async (req: Request, res: Response) => {
+export const deleteCategory = async (id: any) => {
   try {
-    const { id } = req.query;
     await Category.findByIdAndDelete(id);
-    res.status(200).json('Category has been deleted successfully');
+    return 'Category has been deleted successfully';
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot delete category');
   }
 };
