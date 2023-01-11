@@ -14,35 +14,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteGalleryImage = exports.addGalleryImage = exports.getGalleryImages = void 0;
 const gallery_1 = __importDefault(require("../models/gallery"));
-const getGalleryImages = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getGalleryImages = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const imageUrls = yield gallery_1.default.find();
-        res.status(200).json(imageUrls);
+        return imageUrls;
     }
     catch (error) {
-        res.status(500).json('Cannot find such image');
+        throw Error('Cannot find such image');
     }
 });
 exports.getGalleryImages = getGalleryImages;
-const addGalleryImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newImageItem = new gallery_1.default(req.body.params.imageUrl);
+const addGalleryImage = (imageUrl) => __awaiter(void 0, void 0, void 0, function* () {
+    const newImageItem = new gallery_1.default(imageUrl);
     try {
         const newImage = yield newImageItem.save();
-        res.status(200).json(newImage);
+        return newImage;
     }
     catch (error) {
-        res.status(500).json('Cannot add the image');
+        throw Error('Cannot add the image');
     }
 });
 exports.addGalleryImage = addGalleryImage;
-const deleteGalleryImage = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.query;
+const deleteGalleryImage = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield gallery_1.default.findByIdAndDelete(id);
-        res.status(200).json('Image has been deleted successfully');
+        return 'Image has been deleted successfully';
     }
     catch (error) {
-        res.status(500).json('Cannot delete the image');
+        throw Error('Cannot delete the image');
     }
 });
 exports.deleteGalleryImage = deleteGalleryImage;
