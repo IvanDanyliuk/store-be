@@ -14,78 +14,75 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteOrder = exports.payOrder = exports.updateOrder = exports.createOrder = exports.getUserOrders = exports.getOrders = void 0;
 const order_1 = __importDefault(require("../models/order"));
-const getOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { page, ordersPerPage, filterData } = req.query;
+const getOrders = (page, ordersPerPage, filterData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = !filterData ?
             yield order_1.default.find() :
             yield order_1.default.find({ 'customer.lastName': filterData });
         const pages = Math.ceil(response.length / ordersPerPage);
         const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
-        res.status(200).json({
+        return ({
             data: orders,
             pages
         });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot find orders');
     }
 });
 exports.getOrders = getOrders;
-const getUserOrders = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserOrders = (page, ordersPerPage, email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { page, ordersPerPage, email } = req.query;
         const response = yield order_1.default.find({ 'customer.email': email });
         const pages = Math.ceil(response.length / ordersPerPage);
         const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
-        res.status(200).json({
+        return ({
             data: orders,
             pages
         });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot find orders');
     }
 });
 exports.getUserOrders = getUserOrders;
-const createOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createOrder = (order) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newOrderItem = new order_1.default(req.body.params.order);
+        const newOrderItem = new order_1.default(order);
         const newOrder = newOrderItem.save();
-        res.status(200).json(newOrder);
+        return newOrder;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot create an order');
     }
 });
 exports.createOrder = createOrder;
-const updateOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateOrder = (id, updatedOrder) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, updatedOrder } = req.body.params.updatedOrder;
         const updated = yield order_1.default.findByIdAndUpdate(id, updatedOrder, { new: true });
-        res.status(200).json(updated);
+        return updated;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot update an order');
     }
 });
 exports.updateOrder = updateOrder;
-const payOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const payOrder = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        return 'Currently payment is not available';
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot pay an order');
     }
 });
 exports.payOrder = payOrder;
-const deleteOrder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteOrder = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.query;
         yield order_1.default.findByIdAndDelete(id);
-        res.status(200).json('The order had been successfully deleted!');
+        return 'The order had been successfully deleted!';
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot delete an order');
     }
 });
 exports.deleteOrder = deleteOrder;

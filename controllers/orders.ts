@@ -1,75 +1,70 @@
 import mongoose from 'mongoose';
-import { Request, Response } from 'express';
+import { IOrder } from 'types';
 import Order from '../models/order';
-import Stripe from 'stripe';
 
 
-export const getOrders = async (req: any, res: any) => {
-  const { page, ordersPerPage, filterData } = req.query;
+export const getOrders = async (page: any, ordersPerPage: any, filterData: any) => {
   try {
     const response = !filterData ? 
       await Order.find() : 
       await Order.find({ 'customer.lastName': filterData });
     const pages = Math.ceil(response.length / ordersPerPage);
     const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
-    res.status(200).json({
+    return ({
       data: orders,
       pages
     });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot find orders');
   }
 };
 
-export const getUserOrders = async (req: any, res: any) => {
+export const getUserOrders = async (page: any, ordersPerPage: any, email: any) => {
   try {
-    const { page, ordersPerPage, email } = req.query;
     const response = await Order.find({ 'customer.email': email });
     const pages = Math.ceil(response.length / ordersPerPage);
     const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
-    res.status(200).json({
+    return ({
       data: orders,
       pages
     });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot find orders');
   }
 };
 
-export const createOrder = async (req: any, res: any) => {
+export const createOrder = async (order: IOrder) => {
   try {
-    const newOrderItem = new Order(req.body.params.order);
+    const newOrderItem = new Order(order);
     const newOrder = newOrderItem.save();
-    res.status(200).json(newOrder);
+    return newOrder;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot create an order');
   }
 };
 
-export const updateOrder = async (req: any, res: any) => {
+export const updateOrder = async (id: string, updatedOrder: IOrder) => {
   try {
-    const { id, updatedOrder } = req.body.params.updatedOrder;
     const updated = await Order.findByIdAndUpdate(id, updatedOrder, { new: true });
-    res.status(200).json(updated);
+    return updated;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot update an order');
   }
 };
 
-export const payOrder = async (req: any, res: any) => {
+export const payOrder = async () => {
   try {
-    
+    return 'Currently payment is not available'
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot pay an order');
   }
 };
 
-export const deleteOrder = async (req: any, res: any) => {
+export const deleteOrder = async (id: any) => {
   try {
-    const { id } = req.query;
     await Order.findByIdAndDelete(id);
-    res.status(200).json('The order had been successfully deleted!')
+    return 'The order had been successfully deleted!';
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot delete an order');
   }
 };
