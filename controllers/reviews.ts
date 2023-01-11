@@ -1,53 +1,50 @@
 import mongoose from "mongoose";
+import { IReview } from "types";
 import Review from '../models/review';
 
 
-export const getUserReviews = async (req: any, res: any) => {
-  const { email } = req.query;
+export const getUserReviews = async (email: any) => {
   try {
     const reviews = await Review.find({ userEmail: email });
-    res.status(200).json(reviews);
+    return reviews;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot get reviews for this user');
   }
 };
 
-export const getProductReviews = async (req: any, res: any) => {
-  const { productId } = req.query;
+export const getProductReviews = async (productId: any) => {
   try {
     const reviews = await Review.find({ productId });
-    res.status(200).json(reviews);
+    return reviews;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot find reviews for this product');
   }
 }
 
-export const createReview = async (req: any, res: any) => {
-  const newReviewInstance = new Review(req.body.params.review);
+export const createReview = async (review: IReview) => {
+  const newReviewInstance = new Review(review);
   try {
     const newReview = await newReviewInstance.save();
-    res.status(200).json(newReview);
+    return newReview;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot create a new review');
   }
 };
 
-export const updateReview = async (req: any, res: any) => {
-  const { id, updatedReview } = req.body.params.updatedReview;
+export const updateReview = async (id: any, updatedReview: any) => {
   try {
     const updated = await Review.findByIdAndUpdate(id, updatedReview, { new: true });
-    res.status(200).json(updated);
+    return updated;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot update a review');
   }
 };
 
-export const deleteReview = async (req: any, res: any) => {
-  const { id } = req.query;
+export const deleteReview = async (id: any) => {
   try {
     await Review.findByIdAndDelete(id);
-    res.status(200).json('Review has been deleted successfully');
+    return 'Review has been deleted successfully';
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot delete a review');
   }
 };
