@@ -4,58 +4,56 @@ import jwt from 'jsonwebtoken';
 import User from '../models/user';
 
 
-export const signin = async (req: any, res: any) => {
-  const { email, password } = req.body.params.userData;
+export const signin = async (email: any, password: any) => {
   try {
     const existingUser = await User.findOne({ email });
     if(!existingUser) {
-      return res.status(404).json({ message: 'User does not exist.' });
+      throw Error('User does not exist.');
     }
 
     const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
     if(!isPasswordCorrect) {
-      return res.status(400).json({ message: 'Invalid credentials.' });
+      throw Error('Invalid credentials.');
     }
+
     const token = jwt.sign({ email: existingUser.email, id: existingUser._id }, 'test', { expiresIn: '1h' });
-    res.status(200).json({ result: existingUser, token });
+    return ({ result: existingUser, token });
   } catch (error: any) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    throw Error(error);
   }
 };
 
-export const signup = async (req: any, res: any) => {
-  const { firstName, lastName, avatarUrl, email, password, confirmPassword, phone, city, orders, isAdmin } = req.body.params.userData;
+export const signup = async (userData: any) => {
+  const { firstName, lastName, avatarUrl, email, password, confirmPassword, phone, city, orders, isAdmin } = userData;
   try {
     const existingUser = await User.findOne({ email });
     if(existingUser) {
-      return res.status(400).json({ message: 'User already exists.' });
+      throw Error('User already exists.');
     }
     if(password !== confirmPassword) {
-      return res.status(400).json({ message: 'Passwords don\'t match.' });
+      throw Error('Passwords don\'t match.');
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
     const newUser = await User.create({ email, password: hashedPassword, firstName, lastName, avatarUrl, phone, city, orders, isAdmin });
     const token = jwt.sign({ email: newUser.email, id: newUser._id }, 'test', { expiresIn: '1h' });
-    res.status(200).json({ result: newUser, token });
+    return ({ result: newUser, token });
   } catch (error: any) {
-    res.status(500).json({ message: 'Something went wrong.' });
+    throw Error(error);
   }
 };
 
-export const updateUser = async (req: any, res: any) => {
+export const updateUser = async (id: any, userData: any) => {
   try {
-    const { id, userData } = req.body.params.userData;
     const updatedUser = await User.findByIdAndUpdate(id, userData, { new: true });
-    res.status(200).json(updatedUser);
+    return updatedUser;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot update a user');
   }
 };
 
-export const updatePassword = async (req: any, res: any) => {
+export const updatePassword = async (id: any, currentPassword: any, newPassword: any) => {
   try {
-    const { id, currentPassword, newPassword } = req.body.params.passwordData;
     const user = await User.findById(id);
     const isPasswordMatch = await bcrypt.compare(currentPassword, user!.password);
 
@@ -63,21 +61,20 @@ export const updatePassword = async (req: any, res: any) => {
       const hashedNewPassword = await bcrypt.hash(newPassword, 12);
       //@ts-ignore
       const updated = await User.findByIdAndUpdate(id, { ...user!._doc, password: hashedNewPassword }, { new: true });
-      res.status(200).json(updated);
+      return updated;
     } else {
-      res.status(500).json('Passwords don\'t match.');
+      throw Error('Passwords don\'t match.');
     }
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error(error);
   }
 };
 
-export const deleteUser = async (req: any, res: any) => {
+export const deleteUser = async (id: any) => {
   try {
-    const { id } = req.query;
     await User.findByIdAndDelete(id);
-    res.status(200).json('User has been deleted successfully');
+    return 'User has been deleted successfully';
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot delete a user');
   }
 };
