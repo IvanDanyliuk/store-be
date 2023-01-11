@@ -1,42 +1,41 @@
 import mongoose from 'mongoose';
+import { IShipping } from 'types';
 import Shipping from '../models/shipping';
 
 
-export const getShipping = async (req: any, res: any) => {
+export const getShipping = async () => {
   try {
     const shipping = await Shipping.find();
-    res.status(200).json(shipping);
+    return shipping;
   } catch (error: any) {
-    res.status(404).json({ message: error.message });
+    throw Error('Cannot find shipping');
   }
 };
 
-export const createShipping = async (req: any, res: any) => {
-  const newShippingItem = new Shipping(req.body.params.shipping);
+export const createShipping = async (shipping: IShipping) => {
+  const newShippingItem = new Shipping(shipping);
   try {
     const newShipping = await newShippingItem.save();
-    res.status(200).json(newShipping);
+    return newShipping;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot create a new shipping');
   }
 };
 
-export const updateShipping = async (req: any, res: any) => {
+export const updateShipping = async (id: any, updatedShipping: any) => {
   try {
-    const { id, updatedShipping } = req.body.params.updatedShipping;
     const updated = await Shipping.findByIdAndUpdate(id, updatedShipping, { new: true });
-    res.status(200).json(updated);
+    return updated;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot update a shipping');
   }
 };
 
-export const deleteShipping = async (req: any, res: any) => {
+export const deleteShipping = async (id: any) => {
   try {
-    const { id } = req.query;
     await Shipping.findByIdAndDelete(id);
-    res.status(200).json('Shipping has been deleted successfully');
+    return 'Shipping has been deleted successfully';
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot delete a shipping');
   }
 };
