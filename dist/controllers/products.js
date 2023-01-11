@@ -14,8 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getBrands = exports.findProducts = exports.getProduct = exports.getTopProducts = exports.getProducts = void 0;
 const product_1 = __importDefault(require("../models/product"));
-const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { page, productsPerPage, category, filterData } = req.query;
+const getProducts = (page, productsPerPage, category, filterData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = category ?
             yield product_1.default.find({ 'category.subCategory.url': category }) :
@@ -32,94 +31,88 @@ const getProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const pages = filterData ?
             Math.ceil(products.length / productsPerPage) :
             Math.ceil(response.length / productsPerPage);
-        res.status(200).json({
+        return ({
             data: products.slice(productsPerPage * (page - 1), productsPerPage * page),
             pages
         });
     }
     catch (error) {
-        res.status(404).json({ message: error.message });
+        throw Error('Products not found');
     }
 });
 exports.getProducts = getProducts;
-const getTopProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { productsNumber } = req.query;
+const getTopProducts = (productsNumber) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const products = yield product_1.default.find();
         const sortedProducts = products.sort((acc, cur) => cur.rating - acc.rating);
         const topRated = sortedProducts.length > productsNumber ? sortedProducts.slice(0, productsNumber) : sortedProducts;
-        res.status(200).json({ data: topRated, pages: topRated.length / productsNumber });
+        return ({ data: topRated, pages: topRated.length / productsNumber });
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Products not found');
     }
 });
 exports.getTopProducts = getTopProducts;
-const getProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
+const getProduct = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const product = yield product_1.default.findById(id);
-        res.status(200).json(product);
+        return product;
     }
     catch (error) {
-        res.status(404).json({ message: error.message });
+        throw Error('Cannot find a product by passed id');
     }
 });
 exports.getProduct = getProduct;
-const findProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title } = req.query;
+const findProducts = (title) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const requestValue = new RegExp(title);
         const products = yield product_1.default.find({ title: { $regex: requestValue, $options: 'i' } });
-        res.status(200).json(products);
+        return products;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot find products');
     }
 });
 exports.findProducts = findProducts;
-const getBrands = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { category } = req.query;
+const getBrands = (category) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const products = yield product_1.default.find({ 'category.subCategory.url': category });
         const brands = [...new Set(products.map(product => product.brand))];
-        res.status(200).json(brands);
+        return brands;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot find brands');
     }
 });
 exports.getBrands = getBrands;
-const createProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const newProductItem = new product_1.default(req.body.params.product);
+const createProduct = (product) => __awaiter(void 0, void 0, void 0, function* () {
+    const newProductItem = new product_1.default(product);
     try {
         const newProduct = yield newProductItem.save();
-        res.status(200).json(newProduct);
+        return newProduct;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot create a new product');
     }
 });
 exports.createProduct = createProduct;
-const updateProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateProduct = (id, updatedProduct) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id, updatedProduct } = req.body.params.updatedProduct;
         const updated = yield product_1.default.findByIdAndUpdate(id, updatedProduct, { new: true });
-        res.status(200).json(updated);
+        return updated;
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot update a product');
     }
 });
 exports.updateProduct = updateProduct;
-const deleteProduct = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteProduct = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { id } = req.query;
         yield product_1.default.findByIdAndDelete(id);
-        res.status(200).json('Product has been deleted successfully');
+        return 'Product has been deleted successfully';
     }
     catch (error) {
-        res.status(500).json({ message: error.message });
+        throw Error('Cannot delete a product');
     }
 });
 exports.deleteProduct = deleteProduct;

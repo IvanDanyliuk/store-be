@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 import Product from '../models/product';
 
 
-export const getProducts = async (req: any, res: any) => {
-  const { page, productsPerPage, category, filterData } = req.query;
+export const getProducts = async (page: any, productsPerPage: any, category: any, filterData: any) => {
+  
   try {
     const response = category ? 
       await Product.find({ 'category.subCategory.url': category }) : 
@@ -26,85 +26,79 @@ export const getProducts = async (req: any, res: any) => {
       Math.ceil(products.length / productsPerPage) : 
       Math.ceil(response.length / productsPerPage);
 
-    res.status(200).json({ 
+    return ({ 
       data: products.slice(productsPerPage * (page - 1), productsPerPage * page), 
       pages
     });
   } catch (error: any) {
-    res.status(404).json({ message: error.message });
+    throw Error('Products not found');
   }
 };
 
-export const getTopProducts = async (req: any, res: any) => {
-  const { productsNumber } = req.query;
+export const getTopProducts = async (productsNumber: any) => {
   try {
     const products = await Product.find();
     const sortedProducts = products.sort((acc, cur) => cur.rating - acc.rating);
     const topRated = sortedProducts.length > productsNumber ? sortedProducts.slice(0, productsNumber) : sortedProducts;
-    res.status(200).json({ data: topRated, pages: topRated.length / productsNumber });
+    return ({ data: topRated, pages: topRated.length / productsNumber });
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Products not found');
   }
 };
 
-export const getProduct = async (req: any, res: any) => {
-  const { id } = req.params;
+export const getProduct = async (id: any) => {
   try {
     const product = await Product.findById(id);
-    res.status(200).json(product);
+    return product;
   } catch (error: any) {
-    res.status(404).json({ message: error.message });
+    throw Error('Cannot find a product by passed id');
   }
 };
 
-export const findProducts = async (req: any, res: any) => {
-  const { title } = req.query;
+export const findProducts = async (title: any) => {
   try {
     const requestValue = new RegExp(title);
     const products = await Product.find({ title: { $regex: requestValue, $options: 'i' } });
-    res.status(200).json(products);
+    return products;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot find products');
   }
 };
 
-export const getBrands = async (req: any, res: any) => {
-  const { category } = req.query;
+export const getBrands = async (category: any) => {
   try {
     const products = await Product.find({ 'category.subCategory.url': category });
     const brands = [...new Set(products.map(product => product.brand))];
-    res.status(200).json(brands);
+    return brands;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot find brands');
   }
 };
 
-export const createProduct = async (req: any, res: any) => {
-  const newProductItem = new Product(req.body.params.product);
+export const createProduct = async (product: any) => {
+  const newProductItem = new Product(product);
   try {
     const newProduct = await newProductItem.save();
-    res.status(200).json(newProduct);
+    return newProduct;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot create a new product');
   }
 };
 
-export const updateProduct = async (req: any, res: any) => {
+export const updateProduct = async (id: any, updatedProduct: any) => {
   try {
-    const { id, updatedProduct } = req.body.params.updatedProduct;
     const updated = await Product.findByIdAndUpdate(id, updatedProduct, { new: true });
-    res.status(200).json(updated);
+    return updated;
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot update a product');
   }
 };
 
-export const deleteProduct = async (req: any, res: any) => {
+export const deleteProduct = async (id: any) => {
   try {
-    const { id } = req.query;
     await Product.findByIdAndDelete(id);
-    res.status(200).json('Product has been deleted successfully');
+    return 'Product has been deleted successfully';
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    throw Error('Cannot delete a product');
   }
 };
