@@ -25,7 +25,7 @@ const getCategories = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getCategories = getCategories;
 const createCategory = (category) => __awaiter(void 0, void 0, void 0, function* () {
-    const newCategoryItem = new category_1.default();
+    const newCategoryItem = new category_1.default(category);
     try {
         const newCategory = yield newCategoryItem.save();
         return newCategory;

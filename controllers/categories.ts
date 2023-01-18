@@ -13,7 +13,7 @@ export const getCategories = async () => {
 };
 
 export const createCategory = async (category: ICategory) => {
-  const newCategoryItem = new Category();
+  const newCategoryItem = new Category(category);
   try {
     const newCategory = await newCategoryItem.save();
     return newCategory;
