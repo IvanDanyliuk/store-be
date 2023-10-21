@@ -16,11 +16,13 @@ exports.deleteOrder = exports.payOrder = exports.updateOrder = exports.createOrd
 const order_1 = __importDefault(require("../models/order"));
 const getOrders = (page, ordersPerPage, filterData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = !filterData ?
-            yield order_1.default.find() :
-            yield order_1.default.find({ 'customer.lastName': filterData });
-        const pages = Math.ceil(response.length / ordersPerPage);
-        const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
+        const query = filterData ? { 'customer.lastName': filterData } : {};
+        const orders = yield order_1.default
+            .find(query)
+            .skip((+page - 1) * +ordersPerPage)
+            .limit(+ordersPerPage);
+        const ordersCount = yield order_1.default.countDocuments(query);
+        const pages = Math.ceil(ordersCount / ordersPerPage);
         return ({
             data: orders,
             pages
@@ -33,9 +35,12 @@ const getOrders = (page, ordersPerPage, filterData) => __awaiter(void 0, void 0,
 exports.getOrders = getOrders;
 const getUserOrders = (page, ordersPerPage, email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield order_1.default.find({ 'customer.email': email });
-        const pages = Math.ceil(response.length / ordersPerPage);
-        const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
+        const orders = yield order_1.default
+            .find({ 'customer.email': email })
+            .skip(+page * +ordersPerPage)
+            .limit(+ordersPerPage);
+        const ordersCount = yield order_1.default.countDocuments({ 'customer.email': email });
+        const pages = Math.ceil(ordersCount / ordersPerPage);
         return ({
             data: orders,
             pages

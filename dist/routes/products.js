@@ -13,9 +13,9 @@ const express_1 = require("express");
 const products_1 = require("../controllers/products");
 const router = (0, express_1.Router)();
 router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { page, productsPerPage, category, filterData } = req.query;
+    const { page, productsPerPage, filterData } = req.query;
     try {
-        const products = yield (0, products_1.getProducts)(page, productsPerPage, category, filterData);
+        const products = yield (0, products_1.getProducts)(page, productsPerPage, filterData);
         res.status(200).json(products);
     }
     catch (error) {

@@ -6,13 +6,12 @@ import Order from '../models/order';
 export const getOrders = async (page: any, ordersPerPage: any, filterData: any) => {
   try {
     const query = filterData ? { 'customer.lastName': filterData } : {};
-    // const response = !filterData ? 
-    //   await Order.find() : 
-    //   await Order.find({ 'customer.lastName': filterData });
-    // const pages = Math.ceil(response.length / ordersPerPage);
-    // const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
 
-    const orders = await Order.find(query).skip(+page * +ordersPerPage).limit(+ordersPerPage);
+    const orders = await Order
+      .find(query)
+      .skip((+page - 1) * +ordersPerPage)
+      .limit(+ordersPerPage);
+      
     const ordersCount = await Order.countDocuments(query);
     const pages = Math.ceil(ordersCount / ordersPerPage);
 
@@ -27,9 +26,10 @@ export const getOrders = async (page: any, ordersPerPage: any, filterData: any) 
 
 export const getUserOrders = async (page: any, ordersPerPage: any, email: any) => {
   try {
-    const orders = await Order.find({ 'customer.email': email }).skip(+page * +ordersPerPage).limit(+ordersPerPage);
-    // const pages = Math.ceil(response.length / ordersPerPage);
-    // const orders = response.slice(ordersPerPage * (page - 1), ordersPerPage * page);
+    const orders = await Order
+      .find({ 'customer.email': email })
+      .skip(+page * +ordersPerPage)
+      .limit(+ordersPerPage);
 
     const ordersCount = await Order.countDocuments({ 'customer.email': email });
     const pages = Math.ceil(ordersCount / ordersPerPage);
