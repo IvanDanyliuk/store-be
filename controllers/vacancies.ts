@@ -8,7 +8,7 @@ export const getVacancies = async (page: any, itemsPerPage: any) => {
     const vacancies = await Vacancy.find({}).skip((+page - 1) * +itemsPerPage).limit(+itemsPerPage);
     const vacanciesCount = await Vacancy.countDocuments({});
     const pages = Math.ceil(vacanciesCount / itemsPerPage);
-    // const vacancies = response.slice(itemsPerPage * (page - 1), itemsPerPage * page);
+    
     return ({
       data: vacancies,
       pages
