@@ -5,9 +5,10 @@ import Vacancy from '../models/vacancy';
 
 export const getVacancies = async (page: any, itemsPerPage: any) => {
   try {
-    const response = await Vacancy.find();
-    const pages = Math.ceil(response.length / itemsPerPage);
-    const vacancies = response.slice(itemsPerPage * (page - 1), itemsPerPage * page);
+    const vacancies = await Vacancy.find({}).skip((+page - 1) * +itemsPerPage).limit(+itemsPerPage);
+    const vacanciesCount = await Vacancy.countDocuments({});
+    const pages = Math.ceil(vacanciesCount / itemsPerPage);
+    
     return ({
       data: vacancies,
       pages

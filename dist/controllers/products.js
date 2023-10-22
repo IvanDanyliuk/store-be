@@ -14,25 +14,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteProduct = exports.updateProduct = exports.createProduct = exports.getBrands = exports.findProducts = exports.getProduct = exports.getTopProducts = exports.getProducts = void 0;
 const product_1 = __importDefault(require("../models/product"));
-const getProducts = (page, productsPerPage, category, filterData) => __awaiter(void 0, void 0, void 0, function* () {
+const getProducts = (page, productsPerPage, filterData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = category ?
-            yield product_1.default.find({ 'category.subCategory.url': category }) :
-            yield product_1.default.find();
         const parsedFilterData = filterData && JSON.parse(filterData);
-        const products = filterData ?
-            response
-                .filter(product => parsedFilterData.brands.length > 0 ?
-                parsedFilterData.brands.includes(product.brand) :
-                product)
-                .filter(product => parsedFilterData.maxPrice > 0 ?
-                product.price >= parsedFilterData.minPrice && product.price <= parsedFilterData.maxPrice :
-                product.price >= parsedFilterData.minPrice) : response;
-        const pages = filterData ?
-            Math.ceil(products.length / productsPerPage) :
-            Math.ceil(response.length / productsPerPage);
+        const query = {};
+        if (filterData && parsedFilterData.category)
+            query['category.subCategory.url'] = parsedFilterData.category;
+        if (filterData && parsedFilterData.brands && parsedFilterData.brands.length > 0)
+            query.brand = { $in: parsedFilterData.brands };
+        if (filterData && parsedFilterData.minPrice)
+            query.price = { $gte: +parsedFilterData.minPrice };
+        if (filterData && parsedFilterData.maxPrice)
+            query.price = { $lte: +parsedFilterData.maxPrice };
+        if (filterData && parsedFilterData.minPrice && parsedFilterData.maxPrice)
+            query.price = { $gte: +parsedFilterData.minPrice, $lte: +parsedFilterData.maxPrice };
+        const products = yield product_1.default
+            .find(query)
+            .skip((+page - 1) * +productsPerPage)
+            .limit(+productsPerPage);
+        const productsCount = yield product_1.default.countDocuments(query);
+        const pages = Math.ceil(productsCount / +productsPerPage);
         return ({
-            data: products.slice(productsPerPage * (page - 1), productsPerPage * page),
+            data: products,
             pages
         });
     }
@@ -43,10 +46,8 @@ const getProducts = (page, productsPerPage, category, filterData) => __awaiter(v
 exports.getProducts = getProducts;
 const getTopProducts = (productsNumber) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const products = yield product_1.default.find();
-        const sortedProducts = products.sort((acc, cur) => cur.rating - acc.rating);
-        const topRated = sortedProducts.length > productsNumber ? sortedProducts.slice(0, productsNumber) : sortedProducts;
-        return ({ data: topRated, pages: topRated.length / productsNumber });
+        const products = yield product_1.default.find({}).sort({ rating: -1 }).limit(productsNumber || 0);
+        return ({ data: products, pages: products.length / productsNumber });
     }
     catch (error) {
         throw Error('Products not found');

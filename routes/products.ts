@@ -14,9 +14,9 @@ import {
 const router = Router();
 
 router.get('/', async (req: Request, res: Response) => {
-  const { page, productsPerPage, category, filterData } = req.query;
+  const { page, productsPerPage, filterData } = req.query;
   try {
-    const products = await getProducts(page, productsPerPage, category, filterData);
+    const products = await getProducts(page, productsPerPage, filterData);
     res.status(200).json(products);
   } catch (error: any) {
     res.status(404).json(error);

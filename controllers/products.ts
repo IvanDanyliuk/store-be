@@ -2,32 +2,27 @@ import mongoose from 'mongoose';
 import Product from '../models/product';
 
 
-export const getProducts = async (page: any, productsPerPage: any, category: any, filterData: any) => {
-  
+export const getProducts = async (page: any, productsPerPage: any, filterData?: any) => {
   try {
-    const response = category ? 
-      await Product.find({ 'category.subCategory.url': category }) : 
-      await Product.find();
-      
     const parsedFilterData = filterData && JSON.parse(filterData);
 
-    const products = filterData ? 
-      response
-        .filter(product => parsedFilterData!.brands.length > 0 ? 
-          parsedFilterData!.brands.includes(product.brand) : 
-          product
-        )
-        .filter(product => parsedFilterData.maxPrice > 0 ? 
-          product.price >= parsedFilterData.minPrice && product.price <= parsedFilterData.maxPrice : 
-          product.price >= parsedFilterData.minPrice
-        ) : response;
+    const query: any = {};
+    if(filterData && parsedFilterData.category) query['category.subCategory.url'] = parsedFilterData.category;
+    if(filterData && parsedFilterData.brands && parsedFilterData.brands.length > 0) query.brand = { $in: parsedFilterData.brands };
+    if(filterData && parsedFilterData.minPrice) query.price = { $gte: +parsedFilterData.minPrice };
+    if(filterData && parsedFilterData.maxPrice) query.price = { $lte: +parsedFilterData.maxPrice };
+    if(filterData && parsedFilterData.minPrice && parsedFilterData.maxPrice) query.price = { $gte: +parsedFilterData.minPrice, $lte: +parsedFilterData.maxPrice };
+    
+    const products = await Product
+      .find(query)
+      .skip((+page - 1) * +productsPerPage)
+      .limit(+productsPerPage);
 
-    const pages = filterData ? 
-      Math.ceil(products.length / productsPerPage) : 
-      Math.ceil(response.length / productsPerPage);
+    const productsCount = await Product.countDocuments(query);
+    const pages = Math.ceil(productsCount / +productsPerPage);
 
     return ({ 
-      data: products.slice(productsPerPage * (page - 1), productsPerPage * page), 
+      data: products, 
       pages
     });
   } catch (error: any) {
@@ -37,10 +32,9 @@ export const getProducts = async (page: any, productsPerPage: any, category: any
 
 export const getTopProducts = async (productsNumber: any) => {
   try {
-    const products = await Product.find();
-    const sortedProducts = products.sort((acc, cur) => cur.rating - acc.rating);
-    const topRated = sortedProducts.length > productsNumber ? sortedProducts.slice(0, productsNumber) : sortedProducts;
-    return ({ data: topRated, pages: topRated.length / productsNumber });
+    const products = await Product.find({}).sort({ rating: -1 }).limit(productsNumber || 0);
+
+    return ({ data: products, pages: products.length / productsNumber });
   } catch (error: any) {
     throw Error('Products not found');
   }
