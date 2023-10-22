@@ -18,15 +18,15 @@ const getProducts = (page, productsPerPage, filterData) => __awaiter(void 0, voi
     try {
         const parsedFilterData = filterData && JSON.parse(filterData);
         const query = {};
-        if (parsedFilterData.category)
+        if (filterData && parsedFilterData.category)
             query['category.subCategory.url'] = parsedFilterData.category;
-        if (parsedFilterData.brands && parsedFilterData.brands.length > 0)
+        if (filterData && parsedFilterData.brands && parsedFilterData.brands.length > 0)
             query.brand = { $in: parsedFilterData.brands };
-        if (parsedFilterData.minPrice)
+        if (filterData && parsedFilterData.minPrice)
             query.price = { $gte: +parsedFilterData.minPrice };
-        if (parsedFilterData.maxPrice)
+        if (filterData && parsedFilterData.maxPrice)
             query.price = { $lte: +parsedFilterData.maxPrice };
-        if (parsedFilterData.minPrice && parsedFilterData.maxPrice)
+        if (filterData && parsedFilterData.minPrice && parsedFilterData.maxPrice)
             query.price = { $gte: +parsedFilterData.minPrice, $lte: +parsedFilterData.maxPrice };
         const products = yield product_1.default
             .find(query)
@@ -34,7 +34,6 @@ const getProducts = (page, productsPerPage, filterData) => __awaiter(void 0, voi
             .limit(+productsPerPage);
         const productsCount = yield product_1.default.countDocuments(query);
         const pages = Math.ceil(productsCount / +productsPerPage);
-        console.log('GET PRODUCTS', { page, productsPerPage, productsCount, pages });
         return ({
             data: products,
             pages

@@ -16,9 +16,10 @@ exports.deleteVacancy = exports.updateVacancy = exports.createVacancy = exports.
 const vacancy_1 = __importDefault(require("../models/vacancy"));
 const getVacancies = (page, itemsPerPage) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield vacancy_1.default.find();
-        const pages = Math.ceil(response.length / itemsPerPage);
-        const vacancies = response.slice(itemsPerPage * (page - 1), itemsPerPage * page);
+        const vacancies = yield vacancy_1.default.find({}).skip((+page - 1) * +itemsPerPage).limit(+itemsPerPage);
+        const vacanciesCount = yield vacancy_1.default.countDocuments({});
+        const pages = Math.ceil(vacanciesCount / itemsPerPage);
+        // const vacancies = response.slice(itemsPerPage * (page - 1), itemsPerPage * page);
         return ({
             data: vacancies,
             pages

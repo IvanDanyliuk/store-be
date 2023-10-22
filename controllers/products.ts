@@ -2,17 +2,17 @@ import mongoose from 'mongoose';
 import Product from '../models/product';
 
 
-export const getProducts = async (page: any, productsPerPage: any, filterData: any) => {
+export const getProducts = async (page: any, productsPerPage: any, filterData?: any) => {
   try {
     const parsedFilterData = filterData && JSON.parse(filterData);
 
     const query: any = {};
-    if(parsedFilterData.category) query['category.subCategory.url'] = parsedFilterData.category;
-    if(parsedFilterData.brands && parsedFilterData.brands.length > 0) query.brand = { $in: parsedFilterData.brands };
-    if(parsedFilterData.minPrice) query.price = { $gte: +parsedFilterData.minPrice };
-    if(parsedFilterData.maxPrice) query.price = { $lte: +parsedFilterData.maxPrice };
-    if(parsedFilterData.minPrice && parsedFilterData.maxPrice) query.price = { $gte: +parsedFilterData.minPrice, $lte: +parsedFilterData.maxPrice };
-
+    if(filterData && parsedFilterData.category) query['category.subCategory.url'] = parsedFilterData.category;
+    if(filterData && parsedFilterData.brands && parsedFilterData.brands.length > 0) query.brand = { $in: parsedFilterData.brands };
+    if(filterData && parsedFilterData.minPrice) query.price = { $gte: +parsedFilterData.minPrice };
+    if(filterData && parsedFilterData.maxPrice) query.price = { $lte: +parsedFilterData.maxPrice };
+    if(filterData && parsedFilterData.minPrice && parsedFilterData.maxPrice) query.price = { $gte: +parsedFilterData.minPrice, $lte: +parsedFilterData.maxPrice };
+    
     const products = await Product
       .find(query)
       .skip((+page - 1) * +productsPerPage)
@@ -20,8 +20,6 @@ export const getProducts = async (page: any, productsPerPage: any, filterData: a
 
     const productsCount = await Product.countDocuments(query);
     const pages = Math.ceil(productsCount / +productsPerPage);
-
-    console.log('GET PRODUCTS', { page, productsPerPage, productsCount, pages })
 
     return ({ 
       data: products, 
